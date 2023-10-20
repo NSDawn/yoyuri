@@ -1,0 +1,7 @@
+section.menu {
+    font-family: VictorMono;
+    font-style: normal;
+    font-weight: normal;
+
+    background-color: var(--rgb-bg);
+}

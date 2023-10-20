@@ -1,0 +1,19 @@
+html {
+  height: 100vh;
+}
+body {
+  margin: 0;
+}
+
+main {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 5fr 3fr;
+  grid-template-columns: 1fr 2fr;
+}
+
+section {
+  margin: 0.75rem;
+  padding: 0.5rem;
+  outline: 0.1rem solid var(--rgb-text);
+}

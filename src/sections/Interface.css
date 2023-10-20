@@ -1,0 +1,7 @@
+section.interface {
+    font-family: VictorMono;
+    font-style: italic;
+    font-weight: normal;
+
+    background-color: var(--rgb-bg);
+}
