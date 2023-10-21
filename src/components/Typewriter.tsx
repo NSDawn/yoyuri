@@ -11,7 +11,16 @@ export default function Typewriter({text, delay} :IProps) {
     useEffect(() => { 
         if (visibleChars < text.length) {
             const timeout = setTimeout(() => {
-                setVisibleChars(visibleChars + 1);
+                let _visibleChars = visibleChars;
+                let nextChar =  text[++_visibleChars]; 
+
+                if (nextChar === "<") { // skip through html tags 
+                    while (nextChar !== ">") {
+                        nextChar = text[++_visibleChars];
+                    }
+                }
+                
+                setVisibleChars(_visibleChars);
             }, delay);
     
             return () => clearTimeout(timeout)
@@ -19,8 +28,8 @@ export default function Typewriter({text, delay} :IProps) {
     }, [visibleChars, delay, text])
     
     return (
-        <span>
-            {text.substring(0, visibleChars)}
+        <span dangerouslySetInnerHTML={{__html: text.substring(0, visibleChars)}}>
+            
         </span>
     )
 }
