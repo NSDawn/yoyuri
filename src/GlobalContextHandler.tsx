@@ -3,11 +3,18 @@ import { Command } from "./sections/TerminalCommands";
 
 function GlobalContextHandler(props: PropsWithChildren) {
 
-    const [G, _] = useState(new GlobalSingleton);
-    
+    const terminalLog = useState<Command[]>([]);
+    const terminalLine = useState("");
+    const record = useState("");
+    const currentInterface = useState<string|null>(null);
 
     return (
-        <GlobalContext.Provider value={G}> 
+        <GlobalContext.Provider value={{
+            "terminalLog": terminalLog,
+            "terminalLine": terminalLine,
+            "record": record,
+            "currentInterface": currentInterface,
+        }}> 
             {props.children}
         </GlobalContext.Provider>
     );
@@ -15,6 +22,7 @@ function GlobalContextHandler(props: PropsWithChildren) {
 
 export default GlobalContextHandler;
 
+/*
 export class GlobalSingleton {
     terminal: {
         box: Command[],
@@ -39,8 +47,10 @@ export class GlobalSingleton {
         }
     }
 }
+*/
+const GlobalContext = createContext<GlobalSingleton>({});
 
-const GlobalContext = createContext(new GlobalSingleton);
+export type GlobalSingleton = Record<string, [any, React.Dispatch<React.SetStateAction<any>>]>
 
 export function useGlobal() {
     return useContext(GlobalContext);

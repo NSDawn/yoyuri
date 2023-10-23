@@ -4,15 +4,16 @@ import { useRef, useState, useEffect } from "react";
 import { Command } from "./TerminalCommands"
 
 export default function Terminal() {
-    const G = useGlobal();
     const [cmd, setCmd] = useState("");
     const refTerminalWindow = useRef<HTMLInputElement | null>(null);
+    const G = useGlobal();
+    const [terminalLog, setTerminalLog] = useGlobal().terminalLog as [Command[], React.Dispatch<Command[]>];
 
     const handleCmdLineKeyPress = (event: React.KeyboardEvent) => {
         switch (event.key) {
             case "Enter" : 
                 if (cmd === "") break;
-                G.terminal.box.push(new Command(G, cmd));
+                setTerminalLog([...terminalLog, new Command(G, cmd)]);
                 setCmd("");             
                 break;
         }
@@ -26,7 +27,7 @@ export default function Terminal() {
         <section className="terminal">
             <div className="window" ref={refTerminalWindow}>
                 {
-                   G.terminal.box.map((command, i) =>
+                   terminalLog.map((command, i) =>
                     { return (
                         <span key={i}>
                             <span dangerouslySetInnerHTML={command.display}/>

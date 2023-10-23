@@ -4,28 +4,23 @@ import { useEffect, useState, useRef } from "react";
 import Typewriter from "../components/Typewriter";
 
 export default function Record() {
-    const G = useGlobal();
     const charDelay = 35;
     const refRecord = useRef<HTMLElement>(null);
 
-    const [recordText, setRecordText] = useState(G.record.text);
-
-    useEffect(() => {
-        setRecordText(G.record.text)
-    }, [G.record.text])
+    const [record, setRecord] = useGlobal().record;
 
     /* for debugging purposes */
     useEffect(() => {
-        G.record.text = STORY["debug"][0]
+        setRecord(STORY["debug"][0])
     }, [])
 
     useEffect(() => {
         if (refRecord.current) refRecord.current.scrollTop = refRecord.current.scrollHeight;
-    }, [recordText])
+    }, [record])
 
     return (
         <section className="record" ref={refRecord}>
-            <Typewriter text={recordText} delay={charDelay}></Typewriter>
+            <Typewriter text={record} delay={charDelay}></Typewriter>
         </section>
     );
 }

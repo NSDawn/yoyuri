@@ -12,11 +12,7 @@ export default function Interface() {
         "map" :      <Map />,
         "memo" :     <Memo />,
     }
-    const [currInterface, setCurrInterface] = useState(interfaces[0]);
-
-    useEffect(() => {
-        G.interface.currInterface = currInterface;
-    }, [currInterface])
+    const [currentInterface, setCurrentInterface] = useGlobal().currentInterface;
 
     return (
         <section className="interface">
@@ -24,8 +20,8 @@ export default function Interface() {
                 {interfaces.map((v, i) => {
                     return (
                         <button
-                            className={`${v} ${v === currInterface ? "current" : ""}`}
-                            onClick={() => {setCurrInterface(v)}}
+                            className={`${v} ${v === currentInterface ? "current" : ""}`}
+                            onClick={() => {setCurrentInterface(v)}}
                             key = {i}
 
                         > {t(`interface/${v}`)}
@@ -38,7 +34,7 @@ export default function Interface() {
                 {interfaces.map((v, i) => {
                     return (
                         <div 
-                            className={`screen ${v} ${v === currInterface ? "current" : ""}`}
+                            className={`screen ${v} ${v === currentInterface ? "current" : ""}`}
                             key = {i}
                         >
                             {interfacesComponents[v]}

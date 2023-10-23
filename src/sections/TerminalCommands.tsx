@@ -62,7 +62,8 @@ export class Command {
             case "clear" :
                 error_code = 0;
                 effect(() => {
-                    this.G.terminal.box = [];
+                    const [_, setTerminal] = this.G.terminal;
+                    setTerminal([]);
                 });
                 break;
 
@@ -72,7 +73,8 @@ export class Command {
                     break;
                 }
                 effect(() => {
-                    this.G.record.text += args.slice(1).join(" ");
+                    const [record, setRecord] = this.G.record;
+                    setRecord(record + args.slice(1).join(" "));
                 })
                 break;
             
