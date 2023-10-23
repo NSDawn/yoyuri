@@ -1,7 +1,72 @@
 section.interface {
     font-family: VictorMono;
-    font-style: italic;
+    font-style: normal;
     font-weight: normal;
 
     background-color: var(--rgb-bg);
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.italic {
+    font-style: italic;
+}
+
+section.interface nav {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+section.interface button { 
+    all: unset;
+    font-family: VictorMono;
+    font-style: normal;
+    margin: 0.5rem;
+    outline: var(--rgb-text) dashed 0.1rem;
+    padding: 0.25rem;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+    }
+
+    &.current, &.current:hover {
+        outline: var(--rgb-text) solid 0.2rem;
+        transform: scale(1);
+        /* playtest later */
+        cursor: auto;
+    }
+}
+
+section.interface div.screen {
+    height: 0%;
+    overflow: hidden;
+    transition: ease-in-out 0.15s;
+
+    &.current {
+        height: 100%;
+        margin: 0rem;
+        padding: 0.5rem;
+    }
+}
+
+section.interface .memo {
+    display: flex;
+    flex-direction: column;
+}
+
+section.interface .memo textarea {
+    all: unset;
+    font-style: italic;
+    height: 100%;
+    outline: var(--rgb-text) 0.1rem solid;
+    color: var(--rgb-text-success);
+    padding: 0.5rem;
+
+    &:focus {
+        outline: var(--rgb-text-success) 0.1rem solid;
+    }
 }

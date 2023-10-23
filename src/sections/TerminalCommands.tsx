@@ -58,12 +58,24 @@ export class Command {
                         error_code = 0;
                 }   
                 break; 
+
             case "clear" :
                 error_code = 0;
                 effect(() => {
-                    this.G.terminal = [];
+                    this.G.terminal.box = [];
                 });
                 break;
+
+            case "debug-put" : 
+                if (!args[1]) {
+                    error_code = 100;
+                    break;
+                }
+                effect(() => {
+                    this.G.record.text += args.slice(1).join(" ");
+                })
+                break;
+            
             default : 
                 error_code = 200;
                 break;
@@ -106,6 +118,11 @@ const RES :IRes = {
 
     "clear" : {
         0 : () => ""
+    },
+
+    "debug-put" : {
+        0 : (args) => `<Debug> Put "${args.slice(1).join(" ")}" on the record.`,
+        100 : () => "Please provide something to put.",
     },
 
     "default" : {

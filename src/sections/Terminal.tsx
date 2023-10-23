@@ -12,7 +12,7 @@ export default function Terminal() {
         switch (event.key) {
             case "Enter" : 
                 if (cmd === "") break;
-                G.terminal.push(new Command(G, cmd));
+                G.terminal.box.push(new Command(G, cmd));
                 setCmd("");             
                 break;
         }
@@ -26,7 +26,7 @@ export default function Terminal() {
         <section className="terminal">
             <div className="window" ref={refTerminalWindow}>
                 {
-                   G.terminal.map((command, i) =>
+                   G.terminal.box.map((command, i) =>
                     { return (
                         <span key={i}>
                             <span dangerouslySetInnerHTML={command.display}/>
@@ -38,8 +38,11 @@ export default function Terminal() {
             </div>
             <input 
                 className="command-line" 
+                placeholder="..."
+                
                 value={cmd} 
                 onInput={e => setCmd((e.target as any).value) }
+                
                 onKeyDown={handleCmdLineKeyPress} 
                 type="text" 
             />

@@ -7,6 +7,7 @@ interface IProps {
 
 export default function Typewriter({text, delay} :IProps) {
     const [visibleChars, setVisibleChars] = useState(0);
+    const [animateCursor, setAnimateCursor] = useState(false);
 
     useEffect(() => { 
         if (visibleChars < text.length) {
@@ -22,14 +23,18 @@ export default function Typewriter({text, delay} :IProps) {
                 
                 setVisibleChars(_visibleChars);
             }, delay);
-    
+            setAnimateCursor(true);
             return () => clearTimeout(timeout)
-        }
+        } 
+        setAnimateCursor(false);
     }, [visibleChars, delay, text])
     
     return (
-        <span dangerouslySetInnerHTML={{__html: text.substring(0, visibleChars)}}>
-            
-        </span>
+        <span
+            dangerouslySetInnerHTML = {{__html: 
+                text.substring(0, visibleChars) + 
+                (animateCursor ? " |" : "")
+            }} 
+        />
     )
 }

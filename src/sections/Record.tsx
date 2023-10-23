@@ -1,11 +1,12 @@
 import "./Record.css"
 import { useGlobal } from "../GlobalContextHandler";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Typewriter from "../components/Typewriter";
 
 export default function Record() {
     const G = useGlobal();
     const charDelay = 35;
+    const refRecord = useRef<HTMLElement>(null);
 
     const [recordText, setRecordText] = useState(G.record.text);
 
@@ -13,12 +14,17 @@ export default function Record() {
         setRecordText(G.record.text)
     }, [G.record.text])
 
+    /* for debugging purposes */
     useEffect(() => {
         G.record.text = STORY["debug"][0]
     }, [])
 
+    useEffect(() => {
+        if (refRecord.current) refRecord.current.scrollTop = refRecord.current.scrollHeight;
+    }, [recordText])
+
     return (
-        <section className="record">
+        <section className="record" ref={refRecord}>
             <Typewriter text={recordText} delay={charDelay}></Typewriter>
         </section>
     );
@@ -26,14 +32,14 @@ export default function Record() {
 
 const STORY :Record<string, Record<number, string>> = {
     "debug" : {
-        0:             "" + 
+        0:             "--------------------------------------" + 
             "<br />" + "5 FEBRUARY⑤ 2005.⑳ 5:17 PM." +
             "<br />" + "LONG BEACH GAZETTE⑩ - MAIN OFFICE" +
             "<br />" + "--------------------------------------" +
             "<br />" + "⑳" +
             "<br />" + "UEHARA, WESLEY" +
-            "<br />" + "| You got on the front page again. Nice job, bro." +
-            "<br />" + "| This one was even more phoned-in than your last one,⑤ heh." +
+            "<br />" + "# You got on the front page again. Nice job, bro." +
+            "<br />" + "# This one was even more phoned-in than your last one,⑤ heh." +
             "<br />" + "⑳" +
             "<br />" + "HAKAHILO, HAYU" +
             "<br />" + "| Was it that obvious...?" +

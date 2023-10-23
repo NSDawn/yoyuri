@@ -1,22 +1,31 @@
 section.terminal {
     font-family: FiraCode;
     font-weight: normal;
-
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-
+    flex-grow: none;
     background-color: var(--rgb-bg);
 }
 
 section.terminal > .window {
     /* background-color: var(--rgb-debug); */
-    outline: var(--rgb-debug) 2px dotted;
-    overflow: scroll;
-    height: 27vh;
+    outline: var(--rgb-text) 0.1rem solid;
+    overflow-y: scroll; overflow-x: hidden;
+    
+    height: 100%;
     padding: 0.5rem;
     line-height: 1.25rem;
 }
 
 section.terminal > .command-line {
-    margin: 0.25rem;
+    margin: 0.5rem 0rem;
+    padding: 0.15rem 0.5rem;
+    width: 90%;
+    color: var(--rgb-text-success);
+    outline: var(--rgb-text) dashed 0.1rem; 
+}
+
+section.terminal > .command-line:focus {
+    outline: var(--rgb-text-success) solid 0.2rem; 
 }

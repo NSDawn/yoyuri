@@ -1,6 +1,15 @@
 section.record {
     font-family: CourierPrime;
     font-weight: normal;
-
+    overflow-y: scroll; overflow-x: hidden;
     background-color: var(--rgb-bg);
 }
+::-webkit-scrollbar {
+    background-color: var(--rgb-bg);
+    width: 0.5rem;
+} 
+::-webkit-scrollbar-thumb {
+    background-color: var(--rgb-text);
+    
+    border-radius: 0;
+}  
