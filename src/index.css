@@ -73,6 +73,11 @@
   font-style: italic;
 }
 
+@font-face {
+  font-family: "NotoEmoji";
+  src: url("/assets/fonts/NotoEmoji/NotoEmoji-VariableFont_wght.ttf");
+}
+
 :root {
   font-family: VictorMono;
   line-height: 1.5;
@@ -89,7 +94,9 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --rgb-text: #53f936;
+  --rgb-text: #ffffff;
+  --rgb-ui: #53f936;
+  --rgb-ui-select: #52ffe5;
 
   --rgb-text-error: #f44f4f;
   --rgb-text-warning: #f9f152;

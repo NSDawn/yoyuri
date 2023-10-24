@@ -15,5 +15,5 @@ main {
 section {
   margin: 0.75rem;
   padding: 0.5rem;
-  outline: 0.1rem solid var(--rgb-text);
+  outline: 0.1rem solid var(--rgb-ui);
 }

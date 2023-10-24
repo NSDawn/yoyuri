@@ -1,5 +1,5 @@
 section.interface {
-    font-family: VictorMono;
+    font-family: VictorMono, NotoEmoji;
     font-style: normal;
     font-weight: normal;
 
@@ -22,10 +22,10 @@ section.interface nav {
 
 section.interface button { 
     all: unset;
-    font-family: VictorMono;
+    font-family: VictorMono, NotoEmoji;
     font-style: normal;
     margin: 0.5rem;
-    outline: var(--rgb-text) dashed 0.1rem;
+    outline: var(--rgb-ui) dashed 0.1rem;
     padding: 0.25rem;
 
     &:hover {
@@ -34,7 +34,7 @@ section.interface button {
     }
 
     &.current, &.current:hover {
-        outline: var(--rgb-text) solid 0.2rem;
+        outline: var(--rgb-ui) solid 0.2rem;
         transform: scale(1);
         /* playtest later */
         cursor: auto;
@@ -54,7 +54,7 @@ section.interface div.screen {
 }
 
 section.interface h2 {
-    line-height: 1.25rem;
+    line-height: 1.5rem;
     font-size: 1.5rem;
     margin: 0.5rem 0;
 }
@@ -67,12 +67,43 @@ section.interface .memo {
 section.interface .memo textarea {
     all: unset;
     font-style: italic;
+    margin: 0.5rem 0rem;
     height: 100%;
-    outline: var(--rgb-text) 0.1rem solid;
+    outline: var(--rgb-ui) 0.1rem solid;
     color: var(--rgb-text-success);
     padding: 0.5rem;
 
     &:focus {
-        outline: var(--rgb-text-success) 0.1rem solid;
+        outline: var(--rgb-ui-select) 0.1rem solid;
     }
+}
+
+section.interface .map {
+    display: flex;
+    flex-direction: column;
+}
+
+section.interface .map pre {
+    scrollbar-gutter: stable;
+    outline: var(--rgb-ui) 0.1rem dashed;
+    overflow: scroll;
+    margin: 0.5rem 0rem;
+    padding: 0.5rem;
+    height: 100%;
+    & > code {
+        font-family: VictorMono;
+        
+    }
+}
+
+.memo-header-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+section.interface button.memo-clear-button {
+    margin: 0;
+    padding: 0.25rem;
+    margin-left: auto;
+    padding: 0;
 }

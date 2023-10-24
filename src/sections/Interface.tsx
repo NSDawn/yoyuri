@@ -89,18 +89,27 @@ function Profiles() {
 }
 
 function Map() {
+
+    const [map, setMap] = useState (
+        "┌─ Courthouse ─────┐" + "\n" +
+        "│                  │" + "\n" +
+        "│                  │-------------------------------" + "\n" +
+        "│                  │" + "\n" +
+        "│                  ↔" + "\n" +
+        "│                  │" + "\n" +
+        "│                  │" + "\n" +
+        "│                  │" + "\n" +
+        "│                  │" + "\n" +
+        "╘══════════════════╛" + "\n" +
+        ""
+    );
+
     return (
         <>
             <h2>MAP</h2>
-            <span>
-                -------------+........<br />
-                .............|........<br />
-                .............|........<br />
-                ............[X].......<br />
-                .............|........<br />
-                .............+--------<br />
-                ......................<br />
-            </span>
+            <pre><code>
+            {map} 
+            </code></pre>
         </>
     )
 }
@@ -113,7 +122,12 @@ function Memo() {
 
     return (
         <>
-            <h2>MEMO</h2>
+            <div className="memo-header-wrapper">
+                <h2>{t("interface/memo/h")}</h2>
+                {memo !== "" ? 
+                <button className="memo-clear-button" onClick={() => {setMemo("")}}>{t("interface/memo/clear-button")}</button>
+                : null}
+            </div>
             <textarea 
             spellCheck="false" 
             value={memo} 

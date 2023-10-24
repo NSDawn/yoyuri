@@ -10,7 +10,7 @@ section.terminal {
 
 section.terminal > .window {
     /* background-color: var(--rgb-debug); */
-    outline: var(--rgb-text) 0.1rem solid;
+    outline: var(--rgb-ui) 0.1rem solid;
     overflow-y: scroll; overflow-x: hidden;
     
     height: 100%;
@@ -23,9 +23,9 @@ section.terminal > .command-line {
     padding: 0.15rem 0.5rem;
     width: 90%;
     color: var(--rgb-text-success);
-    outline: var(--rgb-text) dashed 0.1rem; 
+    outline: var(--rgb-ui) dashed 0.1rem; 
 }
 
 section.terminal > .command-line:focus {
-    outline: var(--rgb-text-success) solid 0.2rem; 
+    outline: var(--rgb-ui-select) solid 0.2rem; 
 }

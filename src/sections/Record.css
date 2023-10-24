@@ -7,16 +7,16 @@ section.record {
 ::-webkit-scrollbar {
     background-color: var(--rgb-bg);
     width: 0.5rem;
+    height: 0.5rem;
 } 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--rgb-text);
-    
+    background-color: var(--rgb-ui);
     border-radius: 0;
 }  
 
 section.record ::selection {
     color: var(--rgb-bg);
-    background-color: var(--rgb-text);
+    background-color: var(--rgb-ui-select);
     font-weight: bold;
 }
   
