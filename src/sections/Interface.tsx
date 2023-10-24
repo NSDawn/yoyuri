@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Interface() {
     
-    const G = useGlobal();
     const interfaces = ["evidence", "profiles", "map", "memo"];
     let interfacesComponents: Record<string, React.ReactElement> = {
         "evidence" : <Evidence />,
@@ -13,6 +12,8 @@ export default function Interface() {
         "memo" :     <Memo />,
     }
     const [currentInterface, setCurrentInterface] = useGlobal().currentInterface;
+
+    useEffect(() => {setCurrentInterface(interfaces[0])}, [])
 
     return (
         <section className="interface">
@@ -58,19 +59,25 @@ function Evidence() {
 function Profiles() {
 
     const db_profiles = [
-        {name: "Hayu Tē Hakahilo", desc: "a funny guy who is a funny"},
-        {name: "Wesley Uehara", desc: "A junior reporter at Long Beach Gazette, and a good friend of mine."},
-        {name: "Christian Glauch", desc: "An expert JavaScript developer who hates Rust."},
-        {name: "Nishant Suria", desc: "Very sus."},
-    ]
+        {id: "hayu-te-hakahilo", name: "Hayu Tē Hakahilo", desc: "a funny guy who is a funny"},
+        {id: "wesley-uehara", name: "Wesley Uehara", desc: "A junior reporter at Long Beach Gazette, and a good friend of mine."},
+        {id: "christian-glauch", name: "Christian Glauch", desc: "An expert JavaScript developer who hates Rust."},
+        {id: "nishant-suria", name: "Nishant Suria", desc: "Very sus."},
+    ];
+
+    const [terminalLine, setTerminalLine] = useGlobal().terminalLine;
 
     return (
         <>
+            <h2>PROFILES</h2>
             <ul>
                 {db_profiles.map((profile, i) => {
+                    const SPEAK_CMD = 'speak';
                     return (
                         <li key={i}>
-                            <big>{profile.name}</big>
+                            <button
+                                onClick = {() => { setTerminalLine(`${terminalLine.split(" ")[0] || SPEAK_CMD} ${profile.id}`) }}
+                            >{profile.name}</button>
                             <br />
                             <span className="italic">{profile.desc}</span>
                         </li>
@@ -84,8 +91,7 @@ function Profiles() {
 function Map() {
     return (
         <>
-            <big>MAP</big>
-            <br />
+            <h2>MAP</h2>
             <span>
                 -------------+........<br />
                 .............|........<br />
@@ -100,18 +106,18 @@ function Map() {
 }
 
 function Memo() {
-    const [memoText, setMemoText] = useState("");
-    const G = useGlobal()
+    const [memo, setMemo] = useGlobal().memo;
     
     useEffect(() => {
-    }, [memoText])
+    }, [memo])
 
     return (
         <>
+            <h2>MEMO</h2>
             <textarea 
             spellCheck="false" 
-            value={memoText} 
-            onInput={e => setMemoText((e.target as any).value)}
+            value={memo} 
+            onInput={e => setMemo((e.target as any).value)}
             />
         
         </>

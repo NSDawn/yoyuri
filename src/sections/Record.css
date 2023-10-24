@@ -13,3 +13,10 @@ section.record {
     
     border-radius: 0;
 }  
+
+section.record ::selection {
+    color: var(--rgb-bg);
+    background-color: var(--rgb-text);
+    font-weight: bold;
+}
+  

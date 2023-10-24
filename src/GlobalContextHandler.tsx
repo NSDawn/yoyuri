@@ -7,6 +7,7 @@ function GlobalContextHandler(props: PropsWithChildren) {
     const terminalLine = useState("");
     const record = useState("");
     const currentInterface = useState<string|null>(null);
+    const memo = useState("");
 
     return (
         <GlobalContext.Provider value={{
@@ -14,7 +15,8 @@ function GlobalContextHandler(props: PropsWithChildren) {
             "terminalLine": terminalLine,
             "record": record,
             "currentInterface": currentInterface,
-        }}> 
+            "memo": memo,
+        }}>
             {props.children}
         </GlobalContext.Provider>
     );
@@ -22,32 +24,6 @@ function GlobalContextHandler(props: PropsWithChildren) {
 
 export default GlobalContextHandler;
 
-/*
-export class GlobalSingleton {
-    terminal: {
-        box: Command[],
-        line: string,
-    };
-    record: {
-        text :string,
-    };
-    interface: {
-        currInterface: string | null,
-    }
-    constructor() {
-        this.terminal = {
-            box: [],
-            line: "",
-        };
-        this.record = {
-            text: "",
-        };
-        this.interface = {
-            currInterface: null,
-        }
-    }
-}
-*/
 const GlobalContext = createContext<GlobalSingleton>({});
 
 export type GlobalSingleton = Record<string, [any, React.Dispatch<React.SetStateAction<any>>]>

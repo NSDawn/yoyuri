@@ -62,8 +62,9 @@ export class Command {
             case "clear" :
                 error_code = 0;
                 effect(() => {
-                    const [_, setTerminal] = this.G.terminal;
-                    setTerminal([]);
+                    const [_, setTerminalLog] = this.G.terminalLog;
+                    setTerminalLog(Array(0));
+                    console.log(_);
                 });
                 break;
 

@@ -53,6 +53,12 @@ section.interface div.screen {
     }
 }
 
+section.interface h2 {
+    line-height: 1.25rem;
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+}
+
 section.interface .memo {
     display: flex;
     flex-direction: column;
