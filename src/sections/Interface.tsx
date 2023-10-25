@@ -51,7 +51,8 @@ export default function Interface() {
 function Evidence() {
     return (
         <>
-            yeetussy
+            <h2>{t("interface/evidence/h")}</h2>
+
         </>
     )
 }
@@ -59,9 +60,8 @@ function Evidence() {
 function Profiles() {
 
     const db_profiles = [
-        {id: "hayu-te-hakahilo", name: "Hayu Tē Hakahilo", desc: "a funny guy who is a funny"},
+        {id: "hayu-te-hakahilo", name: "Hayu Tē Hakahilo", desc: "Although I was once a public defender, for now I'm a investigative reporter at Long Beach Gazette."},
         {id: "wesley-uehara", name: "Wesley Uehara", desc: "A junior reporter at Long Beach Gazette, and a good friend of mine."},
-        {id: "christian-glauch", name: "Christian Glauch", desc: "An expert JavaScript developer who hates Rust."},
         {id: "nishant-suria", name: "Nishant Suria", desc: "Very sus."},
     ];
 
@@ -88,27 +88,28 @@ function Profiles() {
     )
 }
 
+import { tRoom } from "../GlobalContextHandler";
+import Typewriter from "../components/Typewriter";
+
 function Map() {
 
-    const [map, setMap] = useState (
-        "┌─ Courthouse ─────┐" + "\n" +
-        "│                  │" + "\n" +
-        "│                  │-------------------------------" + "\n" +
-        "│                  │" + "\n" +
-        "│                  ↔" + "\n" +
-        "│                  │" + "\n" +
-        "│                  │" + "\n" +
-        "│                  │" + "\n" +
-        "│                  │" + "\n" +
-        "╘══════════════════╛" + "\n" +
-        ""
+    const [map, setMap] = useState(
+        tRoom("long-beach-gazette-main-office", [["H", "rr"], ["C", "main"]])
     );
+    const G = useGlobal()
+    const [currentRoom, setCurrentRoom] = G.currentRoom;
+    const [currentMap, setCurrentMap] = G.currentMap;
+    const charDelay = 20;
+
+    useEffect(() => {
+        setMap(tRoom(currentMap, [["H", currentRoom], ["C", "main"]]));
+    }, [currentMap, currentRoom]);
 
     return (
         <>
             <h2>MAP</h2>
-            <pre><code>
-            {map} 
+            <pre><code dangerouslySetInnerHTML={{__html: map }}>
+                
             </code></pre>
         </>
     )

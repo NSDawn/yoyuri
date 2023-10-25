@@ -4,6 +4,9 @@ section.record {
     overflow-y: scroll; overflow-x: hidden;
     background-color: var(--rgb-bg);
 }
+section.record.noscroll {
+    overflow-y: hidden;
+}
 ::-webkit-scrollbar {
     background-color: var(--rgb-bg);
     width: 0.5rem;

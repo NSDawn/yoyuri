@@ -6,12 +6,14 @@ import { Command } from "./TerminalCommands"
 export default function Terminal() {
     const refTerminalWindow = useRef<HTMLInputElement | null>(null);
     const G = useGlobal();
-    const [terminalLog, setTerminalLog] = useGlobal().terminalLog as [Command[], React.Dispatch<Command[]>];
-    const [terminalLine, setTerminalLine] = useGlobal().terminalLine;
+    const [terminalLog, setTerminalLog] = G.terminalLog as [Command[], React.Dispatch<Command[]>];
+    const [terminalLine, setTerminalLine] = G.terminalLine;
+    const [isRecordAnimating, setIsTerminalAnimating] = G.isRecordAnimating;
 
     const [cmdHistoryIndex, setCmdHistoryIndex] = useState(0);
 
     const handleCmdLineKeyPress = (event: React.KeyboardEvent) => {
+        if (isRecordAnimating) return;
         switch (event.key) {
             case "Enter" : 
                 if (terminalLine === "") break;
@@ -62,12 +64,13 @@ export default function Terminal() {
                 }
             </div>
             <input 
-                className="command-line" 
+                className={`command-line ${isRecordAnimating ? "hidden" : ""}`} 
                 placeholder="..."
                 
                 value={terminalLine} 
                 onChange={e => setTerminalLine((e.target as any).value) }
-                
+                readOnly={isRecordAnimating}
+
                 onKeyDown={handleCmdLineKeyPress} 
                 type="text" 
             />

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+import { useGlobal } from "../GlobalContextHandler";
 
 interface IProps {
     text :string;
     delay :number;
+    isAnimatingFunction: (set: boolean) => void|boolean
 }
 
-export default function Typewriter({text, delay} :IProps) {
+export default function Typewriter({text, delay, isAnimatingFunction} :IProps) {
     const [visibleChars, setVisibleChars] = useState(0);
     const [animateCursor, setAnimateCursor] = useState(false);
 
@@ -24,10 +26,14 @@ export default function Typewriter({text, delay} :IProps) {
                 setVisibleChars(_visibleChars);
             }, delay);
             setAnimateCursor(true);
+            isAnimatingFunction(true);
             return () => clearTimeout(timeout)
         } 
         setAnimateCursor(false);
-    }, [visibleChars, delay, text])
+        isAnimatingFunction(false);
+    }, [visibleChars, delay, text]);
+
+   
     
     return (
         <span

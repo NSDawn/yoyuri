@@ -21,11 +21,18 @@ section.terminal > .window {
 section.terminal > .command-line {
     margin: 0.5rem 0rem;
     padding: 0.15rem 0.5rem;
+
     width: 90%;
     color: var(--rgb-text-success);
     outline: var(--rgb-ui) dashed 0.1rem; 
+    transition: ease-in-out 0.25s;
 }
 
 section.terminal > .command-line:focus {
     outline: var(--rgb-ui-select) solid 0.2rem; 
+}
+
+section.terminal > .command-line.hidden, section.terminal > .command-line:focus.hidden {
+    width: 0;
+    outline: var(--rgb-ui) dashed 0.1rem;  
 }

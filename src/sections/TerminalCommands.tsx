@@ -1,4 +1,5 @@
 import { GlobalSingleton, useGlobal } from "../GlobalContextHandler";
+import { World } from "../game/World";
 import { useState } from "react";
 
 export default function TerminalCommand() {
@@ -44,14 +45,19 @@ export class Command {
     }
     run(args :string[]) :[number, string] {
         let error_code = 0;
-        let args0 :string = CMD_ALIASES[args[0]] ?? args[0];
+        
+        const _args0 = CMD_ALIASES[args[0]] ?? args[0];
+        let _args :string[] = PARAM_ALIASES[_args0] ? args.map((v) => (PARAM_ALIASES[_args0][v] ?? v)) : [...args];
+        _args[0] = _args0;
+        
+        let ret :string[] = [];
         const doEffects = true;
         const effect = (fn :Function) => {if (doEffects) fn()}
 
-        switch (args0) {
+        switch (_args[0]) {
             case "echo" : 
                 switch (true) {
-                    case (!args[1]) :
+                    case (!_args[1]) :
                         error_code = 100;
                         break;
                     default : 
@@ -67,9 +73,35 @@ export class Command {
                     console.log(_);
                 });
                 break;
+            
+            case "go" :
+                if (!_args[1]) {
+                    error_code = 100;
+                    break;
+                }
+                const [currentMap, setCurrentMap] = this.G.currentMap;
+                const [currentRoom, setCurrentRoom] = this.G.currentRoom;
+                const [record, setRecord] = this.G.record;
+                let trackRoom = World[currentMap][currentRoom];
+                for (let i = 1; i < _args.length; i ++) {
+                    trackRoom = World[currentMap][World[currentMap][trackRoom.name][_args[i]]];
+                    if (!trackRoom) {
+                        error_code = 101;
+                        ret.push(args[i]);
+                        break;
+                    } 
+                } if (error_code == 0) {
+                    ret.push(trackRoom.name)
+                    effect(() => {
+                        setCurrentRoom(trackRoom.name);
+                        //setRecord(record + `<br><br> HAYU moved to the ${trackRoom}.`);
+                    })
+                }
 
-            case "debug-put" : 
-                if (!args[1]) {
+                break;
+
+            case "db-put" : 
+                if (!_args[1]) {
                     error_code = 100;
                     break;
                 }
@@ -78,12 +110,23 @@ export class Command {
                     setRecord(record + args.slice(1).join(" "));
                 })
                 break;
+
+            case "db-tp" : 
+                if (!_args[1]) {
+                    error_code = 100;
+                    break;
+                }
+                effect(() => {
+                    const [_, setCurrentRoom] = this.G.currentRoom;
+                    setCurrentRoom(_args[1]);
+                })
+                break;
             
             default : 
                 error_code = 200;
                 break;
         }
-        let res :string = (RES[args0] ?? RES["default"])[error_code](args);
+        let res :string = (RES[_args[0]] ?? RES["default"])[error_code](args, ret);
         return [error_code, res];
     }
     displayify() {
@@ -123,9 +166,20 @@ const RES :IRes = {
         0 : () => ""
     },
 
-    "debug-put" : {
-        0 : (args) => `<Debug> Put "${args.slice(1).join(" ")}" on the record.`,
+    "go" : {
+        0: (args, ret) => `Went "${args.slice(1).join(", ")}". You are now in "${ret[0]}".`,
+        100: () => "Please provide direction(s) to echo.",
+        101: (_, ret) => `"${ret[0]}" is not a valid direction on this path.`,
+    },
+
+    "db-put" : {
+        0 : (args) => `[Debug] Put "${args.slice(1).join(" ")}" on the record.`,
         100 : () => "Please provide something to put.",
+    },
+
+    "db-tp" : {
+        0 : (args) => `[Debug] Attempted to teleport to "${args[1]}".`,
+        100 : () => "Please provide a room to teleport to.",
     },
 
     "default" : {
@@ -133,12 +187,38 @@ const RES :IRes = {
     }
 }
 
-type IRes = Record<string, Record<number, (args :string[]) => string >>;
+type IRes = Record<string, Record<number, (args :string[], ret: string[]) => string >>;
 
 const CMD_ALIASES: Record<string, string> = {
     "echo" : "echo",
+
     "c" : "clear",
     "clear" : "clear",
+
+    "go": "go",
+    "move": "go",
+    "mv": "go",
+
+    "db-put": "db-put",
+    "db-tp" : "db-tp",
+    
+}
+
+const PARAM_ALIASES: Record<string, Record<string, string>> = {
+    "echo" : {},
+    "clear": {},
+    "go": {
+        "n": "north",
+        "up": "north",
+        "s": "south",
+        "down": "south",
+        "e": "east",
+        "right": "east",
+        "w": "west",
+        "left": "west",
+    },
+    "db-put" : {},
+    "db-tp" : {},
 }
 
 

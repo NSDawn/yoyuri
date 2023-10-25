@@ -84,6 +84,7 @@ section.interface .map {
 }
 
 section.interface .map pre {
+    place-items: center;
     scrollbar-gutter: stable;
     outline: var(--rgb-ui) 0.1rem dashed;
     overflow: scroll;
