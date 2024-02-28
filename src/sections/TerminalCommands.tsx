@@ -79,14 +79,24 @@ export class Command {
                     error_code = 100;
                     break;
                 }
+                if (_args[1] === "help") {
+                    error_code = 1;
+                    break;
+                }
                 const [currentMap, setCurrentMap] = this.G.currentMap;
                 const [currentRoom, setCurrentRoom] = this.G.currentRoom;
                 const [record, setRecord] = this.G.record;
+                const allowedDirections = ["north", "south", "east", "west"];
                 let trackRoom = World[currentMap][currentRoom];
                 for (let i = 1; i < _args.length; i ++) {
+                    if (!allowedDirections.includes(_args[i])) {
+                        error_code = 102; // 102: Bad Direction
+                        ret.push(args[i]);
+                        break;
+                    }
                     trackRoom = World[currentMap][World[currentMap][trackRoom.name][_args[i]]];
                     if (!trackRoom) {
-                        error_code = 101;
+                        error_code = 101; // 101: Disallowed Direction
                         ret.push(args[i]);
                         break;
                     } 
@@ -94,7 +104,6 @@ export class Command {
                     ret.push(trackRoom.name)
                     effect(() => {
                         setCurrentRoom(trackRoom.name);
-                        //setRecord(record + `<br><br> HAYU moved to the ${trackRoom}.`);
                     })
                 }
 
@@ -168,8 +177,10 @@ const RES :IRes = {
 
     "go" : {
         0: (args, ret) => `Went "${args.slice(1).join(", ")}". You are now in "${ret[0]}".`,
-        100: () => "Please provide direction(s) to echo.",
+        1: () => "Usage: go <{north, south, east, west}>...<br/>You can specify multiple directions at once to walk in a path.",
+        100: () => "Please provide direction(s) to go.<br/>Usage: go <{north, south, east, west}>...",
         101: (_, ret) => `"${ret[0]}" is not a valid direction on this path.`,
+        102: (_, ret) => `"${ret[0]}" is not a valid direction. Try north, south, east, or west.`,
     },
 
     "db-put" : {
@@ -198,6 +209,9 @@ const CMD_ALIASES: Record<string, string> = {
     "go": "go",
     "move": "go",
     "mv": "go",
+
+    "t": "take",
+    "take": "take",
 
     "db-put": "db-put",
     "db-tp" : "db-tp",

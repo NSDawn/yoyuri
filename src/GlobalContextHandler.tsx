@@ -1,5 +1,6 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react";
 import { Command } from "./sections/TerminalCommands";
+import { gameFlagList } from "./game/FlagList";
 
 function GlobalContextHandler(props: PropsWithChildren) {
 
@@ -10,9 +11,26 @@ function GlobalContextHandler(props: PropsWithChildren) {
     const memo = useState("");
 
     const currentMap = useState("long-beach-gazette-main-office");
-    const currentRoom = useState("lobby");
+    const currentRoom = useState("main");
 
     const isRecordAnimating = useState(false);
+    const imgIcons = useState(["", ""])
+
+    const profiles = useState([
+        tProfile("hayu-te-hakahilo", "prototype"),
+        tProfile("wesley-uehara", "prototype"),
+    ]);
+
+    const evidence = useState([
+        tEvidence("email-tip-estrella", "prototype"),
+        tEvidence("newspaper-article-smuggling", "prototype"),
+        tEvidence("red-herring", "prototype"),
+        tEvidence("utah-teapot", "prototype"),
+    ]);
+
+    const gameFlags = useState(gameFlagList);
+
+    const interactableEvidence:any = useState([]);
 
     return (
         <GlobalContext.Provider value={{
@@ -24,6 +42,11 @@ function GlobalContextHandler(props: PropsWithChildren) {
             "currentMap": currentMap,
             "currentRoom": currentRoom,
             "isRecordAnimating": isRecordAnimating,
+            "profiles" : profiles,
+            "evidence": evidence,
+            "interactableEvidence": interactableEvidence,
+            "imgIcons" : imgIcons,
+            "gameFlags": gameFlags
         }}>
             {props.children}
         </GlobalContext.Provider>
@@ -32,9 +55,25 @@ function GlobalContextHandler(props: PropsWithChildren) {
 
 export default GlobalContextHandler;
 
-const GlobalContext = createContext<GlobalSingleton>({});
+const GlobalContext = createContext<GlobalSingleton>(null as unknown as GlobalSingleton);
+type EvidenceWithLocation = {evidence: Evidence, location: string}
 
-export type GlobalSingleton = Record<string, [any, React.Dispatch<React.SetStateAction<any>>]>
+export type GlobalSingleton = {
+    terminalLog: State<Command[]>,
+    terminalLine: State<string>,
+    record: State<string>,
+    currentInterface: State<string | null>,
+    memo: State<string>,
+    currentMap: State<string>,
+    currentRoom: State<string>,
+    isRecordAnimating: State<boolean>,
+    profiles: State<Profile[]>,
+    evidence: State<Evidence[]>,
+    interactableEvidence: State<EvidenceWithLocation[]>,
+    imgIcons: State<string[]>,
+    gameFlags: State<Record<string, boolean>>,
+}
+export type State<T> = [T, React.Dispatch<React.SetStateAction<T>>];
 export function useGlobal() {
     return useContext(GlobalContext);
 }
@@ -57,6 +96,18 @@ export function tRoom(room: string, placeChars: PlaceChar[]) : string {
     return renderRoomTemplate(WorldDisplay[room], placeChars);
 }
 
+
+// exporting profiles
+import { Profile, ProfileList } from "./game/ProfileList";
+export function tProfile(name: string, id: string): Profile {
+    return ProfileList[name][id];
+}
+
+// exporting profiles
+import { Evidence, EvidenceList } from "./game/EvidenceList";
+export function tEvidence(name: string, id: string): Evidence {
+    return EvidenceList[name][id];
+}
 
 // debug 
 const _repeat = (f: Function, delay_ms = 200) => {

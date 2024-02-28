@@ -8,7 +8,7 @@ export default function Terminal() {
     const G = useGlobal();
     const [terminalLog, setTerminalLog] = G.terminalLog as [Command[], React.Dispatch<Command[]>];
     const [terminalLine, setTerminalLine] = G.terminalLine;
-    const [isRecordAnimating, setIsTerminalAnimating] = G.isRecordAnimating;
+    const [isRecordAnimating, setIsRecordAnimating] = G.isRecordAnimating;
 
     const [cmdHistoryIndex, setCmdHistoryIndex] = useState(0);
 
@@ -17,7 +17,7 @@ export default function Terminal() {
         switch (event.key) {
             case "Enter" : 
                 if (terminalLine === "") break;
-                const c = new Command(G, terminalLine);
+                const c = new Command(G, terminalLine.toLowerCase());
                 // if i don't push directly here, (cf. `setTerminalLog([...terminalLog, c]);`)  
                 // commands that edit the terminalLog don't work.
                 terminalLog.push(c); 
@@ -35,6 +35,7 @@ export default function Terminal() {
 
     useEffect(() => {
         if (terminalLine === "" && refTerminalWindow.current) refTerminalWindow.current.scrollTop = refTerminalWindow.current.scrollHeight;
+        if (terminalLine.toLowerCase() !== terminalLine) setTerminalLine(terminalLine.toLowerCase());
     }, [terminalLine]);
 
     useEffect(() => {

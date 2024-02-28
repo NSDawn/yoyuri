@@ -10,6 +10,7 @@ section.interface {
     flex-direction: column;
 }
 
+
 .italic {
     font-style: italic;
 }
@@ -33,6 +34,10 @@ section.interface button {
         transform: scale(1.1);
     }
 
+    &:focus {
+        outline: var(--rgb-ui-select) solid 0.1rem;
+    }
+
     &.current, &.current:hover {
         outline: var(--rgb-ui) solid 0.2rem;
         transform: scale(1);
@@ -43,7 +48,7 @@ section.interface button {
 
 section.interface div.screen {
     height: 0%;
-    overflow: hidden;
+    overflow: scroll;
     transition: ease-in-out 0.15s;
 
     &.current {
@@ -81,21 +86,22 @@ section.interface .memo textarea {
 section.interface .map {
     display: flex;
     flex-direction: column;
-}
 
-section.interface .map pre {
-    place-items: center;
-    scrollbar-gutter: stable;
-    outline: var(--rgb-ui) 0.1rem dashed;
-    overflow: scroll;
-    margin: 0.5rem 0rem;
-    padding: 0.5rem;
-    height: 100%;
-    & > code {
-        font-family: VictorMono;
-        
+    & pre {
+        place-items: center;
+        scrollbar-gutter: stable;
+        outline: var(--rgb-ui) 0.1rem dashed;
+        overflow: scroll;
+        margin: 0.5rem 0rem;
+        padding: 0.5rem;
+        height: 100%;
+        & > code {
+            font-family: VictorMono;
+            
+        }
     }
 }
+
 
 .memo-header-wrapper {
     display: flex;
@@ -107,4 +113,103 @@ section.interface button.memo-clear-button {
     padding: 0.25rem;
     margin-left: auto;
     padding: 0;
+}
+
+
+section.interface .profiles {
+    & button {
+        line-height: 0.75rem;
+    }
+    & .profiles-list {
+        display: flex;
+        flex-direction: column;
+
+        padding: 0 0 0 0;
+        & h3 {
+            display: inline;
+            margin: 0;
+            margin-right: 1rem;
+            &:hover {
+                cursor: pointer;
+                font-weight: bold;
+            }
+        }
+        & .cmd-alias {
+            font-family: FiraCode;
+            
+        }
+        & .name-wrapper {
+            display: flex; 
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        & .more-info {
+            font-size:0;
+            overflow: hidden;
+            transition: ease-in-out 0.15s;
+            outline: 0.05rem solid var(--rgb-text-back);
+            &.current {
+                font-size: 1rem;
+                margin: 0;
+                outline: 0.1rem solid var(--rgb-text-back);
+                padding: 0.5rem;
+            }
+        }
+        & pre {
+            margin: 0;
+            font-family: VictorMono;
+            text-wrap:wrap;
+        }
+        
+    }
+}
+section.interface .evidence {
+    & button {
+        line-height: 0.75rem;
+    }
+    & .evidence-list {
+        display: flex;
+        flex-direction: column;
+
+        padding: 0 0 0 0;
+        & h3 {
+            display: inline;
+            margin: 0;
+            margin-right: 1rem;
+            &:hover {
+                cursor: pointer;
+                font-weight: bold;
+            }
+        }
+        & .cmd-alias {
+            font-family: FiraCode;
+            
+        }
+        & .name-wrapper {
+            display: flex; 
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        & .more-info {
+            font-size:0;
+            overflow: hidden;
+            transition: ease-in-out 0.15s;
+            outline: 0.05rem solid var(--rgb-text-back);
+            &.current {
+                font-size: 1rem;
+                margin: 0;
+                outline: 0.1rem solid var(--rgb-text-back);
+                padding: 0.5rem;
+            }
+        }
+
+        & pre {
+            margin: 0;
+            font-family: VictorMono;
+            text-wrap:wrap;
+        }
+        
+    }
 }

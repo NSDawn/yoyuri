@@ -2,11 +2,43 @@ section.record {
     font-family: CourierPrime;
     font-weight: normal;
     overflow-y: scroll; overflow-x: hidden;
-    background-color: var(--rgb-bg);
+    z-index: 1;
+
+    text-shadow:  -0.1rem -0.2rem 0.2rem var(--rgb-bg), 0rem -0.2rem 0.2rem var(--rgb-bg), 0.1rem -0.2rem 0.2rem var(--rgb-bg);
+    & ::selection {
+        color: var(--rgb-bg);
+        background-color: var(--rgb-text);
+        text-shadow: none;
+    }
+}
+section.record span.back {
+    display: inline-block;
+    white-space: nowrap;
+    width: 0;
+    color: var(--rgb-text-back); 
+    text-shadow: none;
+    font-style: italic;
+    z-index: -1; 
+
+    &::selection {
+        display: none;
+        background-color: #00000000;
+    }
 }
 section.record.noscroll {
     overflow-y: hidden;
 }
+
+section.record .face-icon {
+    position: absolute;
+    right: 2rem;
+    top: 2rem;
+    width: min(15vw, 12rem);
+}
+section.record .record-text {
+    margin-right: min(15vw, 12rem);
+}
+
 ::-webkit-scrollbar {
     background-color: var(--rgb-bg);
     width: 0.5rem;
@@ -17,9 +49,13 @@ section.record.noscroll {
     border-radius: 0;
 }  
 
-section.record ::selection {
-    color: var(--rgb-bg);
-    background-color: var(--rgb-ui-select);
-    font-weight: bold;
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
+
   

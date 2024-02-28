@@ -6,14 +6,15 @@ export default function Interface() {
     
     const interfaces = ["evidence", "profiles", "map", "memo"];
     let interfacesComponents: Record<string, React.ReactElement> = {
-        "evidence" : <Evidence />,
-        "profiles" : <Profiles />,
-        "map" :      <Map />,
-        "memo" :     <Memo />,
+        "evidence" : <InterfaceEvidence />,
+        "profiles" : <InterfaceProfiles />,
+        "map" :      <InterfaceMap />,
+        "memo" :     <InterfaceMemo />,
     }
     const [currentInterface, setCurrentInterface] = useGlobal().currentInterface;
-
+    // set interface onload.
     useEffect(() => {setCurrentInterface(interfaces[0])}, [])
+    // add keyboard shortcuts for
 
     return (
         <section className="interface">
@@ -48,42 +49,108 @@ export default function Interface() {
     )
 }
 
-function Evidence() {
+import { Evidence } from "../game/EvidenceList";
+
+function InterfaceEvidence() {
+
+    const [evidence, setEvidence] = useGlobal().evidence;
+    const [terminalLine, setTerminalLine] = useGlobal().terminalLine;
+    const [areDetailsShown, setAreDetailsShown] = useState(Array(evidence.length).fill(false));
+
     return (
         <>
             <h2>{t("interface/evidence/h")}</h2>
+            <div className="evidence-list">
+                {evidence.map((piece: Evidence, i: number) => {
+                    const INSPECT_CMD = 'inspect';
+                    return (
+                        <div key={i}>
+                            <div className="name-wrapper">
+                                <div className="icon">
+                                    {piece.icon}
+                                </div>
+                                <a
+                                    onClick = {() => { setTerminalLine(`${terminalLine.split(" ")[0] || INSPECT_CMD} ${piece.name}`) }}
+                                >
+                                    <h3>{piece.displayName}</h3> 
+                                    <span className="cmd-alias">{piece.cmdAliases[0]}</span>
+                                </a>
+                            </div>
+                            <div className={`more-info ${areDetailsShown[i] ? "current" : ""}`}>
+                                <span className="italic">
+                                    (
+                                    <span className="type">{piece.type}</span>
+                                    )
+                                    <br />
+                                    <span className="origin">{piece.origin}</span>
+                                    <span className="desc"><pre>{piece.desc}</pre></span>
+                                </span>
+                            </div>
+                            <button
+                                onClick= {() => {let arr = [...areDetailsShown]; arr[i] = !areDetailsShown[i]; setAreDetailsShown(arr);}}
+                            >
+                                {areDetailsShown[i] ? "-" : "+"}
+                            </button>
 
+                        </div>
+                    )
+                })}
+            </div>
         </>
     )
 }
 
-function Profiles() {
+import { Profile } from "../game/ProfileList";
+function InterfaceProfiles() {
 
-    const db_profiles = [
-        {id: "hayu-te-hakahilo", name: "Hayu Tē Hakahilo", desc: "Although I was once a public defender, for now I'm a investigative reporter at Long Beach Gazette."},
-        {id: "wesley-uehara", name: "Wesley Uehara", desc: "A junior reporter at Long Beach Gazette, and a good friend of mine."},
-        {id: "nishant-suria", name: "Nishant Suria", desc: "Very sus."},
-    ];
-
+    const [profiles, setProfiles] = useGlobal().profiles;
     const [terminalLine, setTerminalLine] = useGlobal().terminalLine;
+
+    const [areDetailsShown, setAreDetailsShown] = useState(Array(profiles.length).fill(false));
+
+    
 
     return (
         <>
-            <h2>PROFILES</h2>
-            <ul>
-                {db_profiles.map((profile, i) => {
+            <h2>{t("interface/profiles/h")}</h2>
+            <div className="profiles-list">
+                {profiles.map((profile: Profile, i: number) => {
                     const SPEAK_CMD = 'speak';
                     return (
-                        <li key={i}>
+                        <div key={i}>
+                            <div className="name-wrapper">
+                                <div className="icon">
+                                    {profile.icon}
+                                </div>
+                                <a
+                                    onClick = {() => { setTerminalLine(`${terminalLine.split(" ")[0] || SPEAK_CMD} ${profile.name}`) }}
+                                >
+                                    <h3>{profile.displayName}</h3> 
+                                    <span className="cmd-alias">{profile.cmdAliases[0]}</span>
+                                </a>
+                            </div>
+                            <div className={`more-info ${areDetailsShown[i] ? "current" : ""}`}>
+                                <span className="italic">
+                                    (
+                                    <span className="age">{profile.age}</span>,&nbsp;
+                                    <span className="ethnicity">{profile.ethnicity}</span>
+                                    )
+                                    <br />
+                                    <span className="hometown">{profile.hometown}</span>&nbsp;
+                                    <br />
+                                    <span className="desc"><pre>{profile.desc}</pre></span>
+                                </span>
+                            </div>
                             <button
-                                onClick = {() => { setTerminalLine(`${terminalLine.split(" ")[0] || SPEAK_CMD} ${profile.id}`) }}
-                            >{profile.name}</button>
-                            <br />
-                            <span className="italic">{profile.desc}</span>
-                        </li>
+                                onClick= {() => {let arr = [...areDetailsShown]; arr[i] = !areDetailsShown[i]; setAreDetailsShown(arr);}}
+                            >
+                                {areDetailsShown[i] ? "-" : "+"}
+                            </button>
+
+                        </div>
                     )
                 })}
-            </ul>
+            </div>
         </>
     )
 }
@@ -91,10 +158,10 @@ function Profiles() {
 import { tRoom } from "../GlobalContextHandler";
 import Typewriter from "../components/Typewriter";
 
-function Map() {
+function InterfaceMap() {
 
     const [map, setMap] = useState(
-        tRoom("long-beach-gazette-main-office", [["H", "rr"], ["C", "main"]])
+        tRoom("long-beach-gazette-main-office", [["H", "main"], ["U", "lobby"]])
     );
     const G = useGlobal()
     const [currentRoom, setCurrentRoom] = G.currentRoom;
@@ -102,7 +169,7 @@ function Map() {
     const charDelay = 20;
 
     useEffect(() => {
-        setMap(tRoom(currentMap, [["H", currentRoom], ["C", "main"]]));
+        setMap(tRoom(currentMap, [["H", currentRoom], ["U", "lobby"]]));
     }, [currentMap, currentRoom]);
 
     return (
@@ -115,7 +182,7 @@ function Map() {
     )
 }
 
-function Memo() {
+function InterfaceMemo() {
     const [memo, setMemo] = useGlobal().memo;
     
     useEffect(() => {

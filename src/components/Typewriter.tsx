@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { useGlobal } from "../GlobalContextHandler";
+import { useGlobal, State } from "../GlobalContextHandler";
 
 interface IProps {
     text :string;
     delay :number;
     isAnimatingFunction: (set: boolean) => void|boolean
+    imgIconsState :State<string[]>
 }
 
-export default function Typewriter({text, delay, isAnimatingFunction} :IProps) {
+export default function Typewriter({text, delay, isAnimatingFunction, imgIconsState} :IProps) {
     const [visibleChars, setVisibleChars] = useState(0);
     const [animateCursor, setAnimateCursor] = useState(false);
 
@@ -22,6 +23,22 @@ export default function Typewriter({text, delay, isAnimatingFunction} :IProps) {
                         nextChar = text[++_visibleChars];
                     }
                 }
+
+                let textNow = text.substring(0, _visibleChars)
+                let imgIconTagIdx = textNow.lastIndexOf("<I:") // <I:0:bingus_filename/>
+                if (imgIconTagIdx != -1) {
+                    let cmd = "";
+                    while (textNow[imgIconTagIdx] != "/" && textNow[imgIconTagIdx]) {
+                        cmd += textNow[imgIconTagIdx];
+                        imgIconTagIdx ++;
+                    }
+                    console.log(cmd);
+                    let [_, imgIconIdx, imgIconFilename] = cmd.split(":");
+                    let [imgIcons, setImgIcons] = imgIconsState;
+                    let arr = [...imgIcons];
+                    arr[parseInt(imgIconIdx)] = imgIconFilename;
+                    setImgIcons(arr);
+                }
                 
                 setVisibleChars(_visibleChars);
             }, delay);
@@ -33,8 +50,6 @@ export default function Typewriter({text, delay, isAnimatingFunction} :IProps) {
         isAnimatingFunction(false);
     }, [visibleChars, delay, text]);
 
-   
-    
     return (
         <span
             dangerouslySetInnerHTML = {{__html: 
