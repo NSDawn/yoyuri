@@ -4,6 +4,11 @@ import { useGlobal } from "../GlobalContextHandler";
 export default function Menu() {
     
     const G = useGlobal();
+    
+    let menuComponents: Record<string, React.ReactElement> = {
+        "options": <MenuOptions />
+
+    }
 
     return (
         <section className="menu">
@@ -11,4 +16,12 @@ export default function Menu() {
 
         </section>
     );
+}
+
+function MenuOptions() {
+
+    return (
+        <>
+        </>
+    )
 }

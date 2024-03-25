@@ -51,11 +51,13 @@ export default function Typewriter({text, delay, isAnimatingFunction, imgIconsSt
     }, [visibleChars, delay, text]);
 
     return (
-        <span
-            dangerouslySetInnerHTML = {{__html: 
-                text.substring(0, visibleChars) + 
-                (animateCursor ? " |" : "")
-            }} 
-        />
+        <>
+            <span
+                dangerouslySetInnerHTML = {{__html: 
+                    text.substring(0, visibleChars) + 
+                    (animateCursor ? " |" : "")
+                }} 
+            />
+        </>
     )
 }

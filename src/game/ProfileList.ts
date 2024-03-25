@@ -4,6 +4,7 @@ const _P :Record<string, Profile> = {
     "": {
         name :"",
         cmdAliases :[""],
+        mapChar: "[?]",
        
         displayName :"",
         icon: "👤",
@@ -15,6 +16,7 @@ const _P :Record<string, Profile> = {
     "hayu-te-hakahilo": {
         name :"hayu-te-hakahilo",
         cmdAliases :["hth", "hh", "hayu-te-hakahilo", "hayu-tē-hakahilo", "hayu-hakahilo"],
+        mapChar: "H",
        
         displayName :"Hayu Tē Hakahilo",
         icon: "👤",
@@ -26,6 +28,7 @@ const _P :Record<string, Profile> = {
     "wesley-uehara": {
         name :"wesley-uehara",
         cmdAliases :["wu", "wesley-uehara"],
+        mapChar: "U",
         
         displayName :"Wesley Uehara",
         icon: "👤",
@@ -50,6 +53,7 @@ export interface Profile {
     name :string,
     cmdAliases :string[],
     displayName :string,
+    mapChar: string,
     
     icon: string,
     age: number,

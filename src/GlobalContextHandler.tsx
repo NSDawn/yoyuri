@@ -8,7 +8,8 @@ function GlobalContextHandler(props: PropsWithChildren) {
     const terminalLine = useState("");
     const record = useState("");
     const currentInterface = useState<string|null>(null);
-    const memo = useState("");
+    const memo = useState(["", "", "", "", ""]);
+    const memoPage = useState(0);
 
     const currentMap = useState("long-beach-gazette-main-office");
     const currentRoom = useState("main");
@@ -23,14 +24,15 @@ function GlobalContextHandler(props: PropsWithChildren) {
 
     const evidence = useState([
         tEvidence("email-tip-estrella", "prototype"),
-        tEvidence("newspaper-article-smuggling", "prototype"),
         tEvidence("red-herring", "prototype"),
         tEvidence("utah-teapot", "prototype"),
     ]);
 
     const gameFlags = useState(gameFlagList);
 
-    const interactableEvidence:any = useState([]);
+    const interactableEvidence:any = useState([
+        {evidence: tEvidence("newspaper-article-smuggling", "prototype"), room: "rec", map: "long-beach-gazette-main-office"}
+    ]);
 
     return (
         <GlobalContext.Provider value={{
@@ -39,6 +41,7 @@ function GlobalContextHandler(props: PropsWithChildren) {
             "record": record,
             "currentInterface": currentInterface,
             "memo": memo,
+            "memoPage": memoPage,
             "currentMap": currentMap,
             "currentRoom": currentRoom,
             "isRecordAnimating": isRecordAnimating,
@@ -56,14 +59,15 @@ function GlobalContextHandler(props: PropsWithChildren) {
 export default GlobalContextHandler;
 
 const GlobalContext = createContext<GlobalSingleton>(null as unknown as GlobalSingleton);
-type EvidenceWithLocation = {evidence: Evidence, location: string}
+type EvidenceWithLocation = {evidence: Evidence, room: string, map: string}
 
 export type GlobalSingleton = {
     terminalLog: State<Command[]>,
     terminalLine: State<string>,
     record: State<string>,
     currentInterface: State<string | null>,
-    memo: State<string>,
+    memo: State<string[]>,
+    memoPage: State<number>,
     currentMap: State<string>,
     currentRoom: State<string>,
     isRecordAnimating: State<boolean>,

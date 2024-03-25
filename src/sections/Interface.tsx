@@ -52,7 +52,6 @@ export default function Interface() {
 import { Evidence } from "../game/EvidenceList";
 
 function InterfaceEvidence() {
-
     const [evidence, setEvidence] = useGlobal().evidence;
     const [terminalLine, setTerminalLine] = useGlobal().terminalLine;
     const [areDetailsShown, setAreDetailsShown] = useState(Array(evidence.length).fill(false));
@@ -100,15 +99,13 @@ function InterfaceEvidence() {
     )
 }
 
+import { tProfile } from "../GlobalContextHandler";
 import { Profile } from "../game/ProfileList";
 function InterfaceProfiles() {
 
     const [profiles, setProfiles] = useGlobal().profiles;
     const [terminalLine, setTerminalLine] = useGlobal().terminalLine;
-
     const [areDetailsShown, setAreDetailsShown] = useState(Array(profiles.length).fill(false));
-
-    
 
     return (
         <>
@@ -156,50 +153,126 @@ function InterfaceProfiles() {
 }
 
 import { tRoom } from "../GlobalContextHandler";
-import Typewriter from "../components/Typewriter";
+import { WorldDisplay } from "../game/World";
 
 function InterfaceMap() {
 
     const [map, setMap] = useState(
-        tRoom("long-beach-gazette-main-office", [["H", "main"], ["U", "lobby"]])
+        tRoom("long-beach-gazette-main-office", [
+            [tProfile("hayu-te-hakahilo","prototype"), "main"], 
+            [tProfile("wesley-uehara","prototype"), "lobby"]
+        ])
     );
     const G = useGlobal()
     const [currentRoom, setCurrentRoom] = G.currentRoom;
     const [currentMap, setCurrentMap] = G.currentMap;
     const charDelay = 20;
+    const codeElement = useRef(null);
+    const infoBoxElement = useRef(null);
 
     useEffect(() => {
-        setMap(tRoom(currentMap, [["H", currentRoom], ["U", "lobby"]]));
+        setMap(tRoom(currentMap, [
+            [tProfile("hayu-te-hakahilo","prototype"), currentRoom], 
+            [tProfile("wesley-uehara","prototype"), "lobby"]
+        ]));
     }, [currentMap, currentRoom]);
+
+    // very sus
+    useEffect(() => {
+        if (codeElement.current) {
+            
+            const v :any = codeElement.current;
+            const elemChars = v.querySelectorAll(".map-point-of-interest");
+            
+            function mouseoverFnGenerator(el: HTMLElement) {
+                return (() => {
+                    if (infoBoxElement.current) {
+                        const infoBoxElementCurrent: HTMLElement = infoBoxElement.current;
+                        infoBoxElementCurrent.textContent = `${el.dataset.displayName} (${el.dataset.cmdAlias})`;
+                    }
+                })
+            }
+            function mouseoutFnGenerator(el: HTMLElement) {
+                return (() => {
+                    if (infoBoxElement.current) {
+                        const infoBoxElementCurrent: HTMLElement = infoBoxElement.current;
+                        infoBoxElementCurrent.textContent = WorldDisplay[currentMap].displayName;
+                    }
+                })
+            }
+            
+            const eventListenersToRemove : Array<[HTMLElement, string, EventListener]> = [];
+            
+            for (const el of elemChars) {
+                const f = mouseoverFnGenerator(el);
+                el.addEventListener("mouseover", f);
+                eventListenersToRemove.push([el, "mouseover", f]);
+            }
+            for (const el of elemChars) {
+                const f = mouseoutFnGenerator(el);
+                el.addEventListener("mouseout", f);
+                eventListenersToRemove.push([el, "mouseout", f]);
+            }
+            return () => {
+                for (const event of eventListenersToRemove) {
+                    event[0].removeEventListener(event[1], event[2])
+                }
+            }
+        }
+    }, [codeElement, map])
 
     return (
         <>
             <h2>MAP</h2>
-            <pre><code dangerouslySetInnerHTML={{__html: map }}>
+            <pre><code ref={codeElement} dangerouslySetInnerHTML={{__html: map}}>
                 
-            </code></pre>
+            </code>
+            </pre>
+
+            <div ref={infoBoxElement} className="infobox">
+                {WorldDisplay[currentMap].displayName}
+            </div>
         </>
     )
 }
 
 function InterfaceMemo() {
     const [memo, setMemo] = useGlobal().memo;
-    
+    const [memoPage, setMemoPage] = useGlobal().memoPage;
+    const [currentMemo, setCurrentMemo] = useState("");
+    const maxMemoLength = 5;
+
     useEffect(() => {
-    }, [memo])
+        setCurrentMemo(memo[memoPage]);
+        console.log(memo);
+    }, [memoPage]);
+
+    useEffect(() => {
+        setMemo(memo.map((_, i) => {
+            if (i !== memoPage) return memo[i];
+            return currentMemo;
+        }));
+    }, [currentMemo]);
 
     return (
         <>
             <div className="memo-header-wrapper">
-                <h2>{t("interface/memo/h")}</h2>
-                {memo !== "" ? 
-                <button className="memo-clear-button" onClick={() => {setMemo("")}}>{t("interface/memo/clear-button")}</button>
-                : null}
+                <h2>{t("interface/memo/h")}</h2>      
+                
+                <div className="memo-buttons">
+                    {currentMemo !== "" ? 
+                    <button className="" onClick={() => {setCurrentMemo("")}}>{t("interface/memo/clear-button")}</button>
+                    : null}
+                    <button className="" onClick={() => {setMemoPage((memoPage - 1 + maxMemoLength) % maxMemoLength)}}>{t("interface/memo/previous-button")}</button>
+                    <span>{memoPage + 1}</span>
+                    <button className="" onClick={() => {setMemoPage((memoPage + 1) % maxMemoLength)}}>{t("interface/memo/next-button")}</button>
+                </div>  
+                
             </div>
-            <textarea 
-            spellCheck="false" 
-            value={memo} 
-            onInput={e => setMemo((e.target as any).value)}
+            <textarea
+                spellCheck="false" 
+                value={currentMemo} 
+                onInput={e => setCurrentMemo((e.target as any).value)}
             />
         
         </>

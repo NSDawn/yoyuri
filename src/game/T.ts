@@ -7,7 +7,10 @@ const T :Record<string, string> = {
     "interface/map/h": "MAP",
     "interface/memo": "memo",
     "interface/memo/h": "MEMO",
+    "interface/memo/next-button": "➡️",
+    "interface/memo/previous-button": "⬅",
     "interface/memo/clear-button": "🗑",
+    
 }
 
 export default T;

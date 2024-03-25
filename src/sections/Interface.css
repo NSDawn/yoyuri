@@ -95,10 +95,25 @@ section.interface .map {
         margin: 0.5rem 0rem;
         padding: 0.5rem;
         height: 100%;
+        position: relative;
+        cursor: default;
+        user-select: none;
+
         & > code {
             font-family: VictorMono;
-            
+
+            & .map-point-of-interest {
+                
+                color: var(--rgb-text-warning);
+                &:hover {
+                    color: var(--rgb-ui-select);
+                }
+            }
         }
+        
+    }
+    & .infobox {
+        text-align: center;
     }
 }
 
@@ -108,7 +123,7 @@ section.interface .map {
     align-items: center;
     flex-direction: row;
 }
-section.interface button.memo-clear-button {
+section.interface div.memo-buttons {
     margin: 0;
     padding: 0.25rem;
     margin-left: auto;

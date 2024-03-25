@@ -14,7 +14,7 @@ export default function Storyboard({pushToRecordFn}: IProps) {
     useEffect(() => {
         if (!F["1-1-checkedPrinter"] && currentRoom === "rec") {
             pushToRecordFn(S["1-1-longbeachgazette-rec-0"][0]);
-            //F["1-1-checkedPrinter"] = true;
+            F["1-1-checkedPrinter"] = true;
         }
     }, [F, currentRoom])
 

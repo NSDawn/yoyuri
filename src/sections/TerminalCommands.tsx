@@ -1,6 +1,7 @@
 import { GlobalSingleton, useGlobal } from "../GlobalContextHandler";
 import { World } from "../game/World";
 import { useState } from "react";
+import { Evidence } from "../game/EvidenceList";
 
 export default function TerminalCommand() {
     let G = useGlobal();
@@ -18,7 +19,7 @@ export class Command {
     rawtext_unsafe        :string;
     text                  :string;
     args                  :string[];
-    error_code            :number;
+    errorCode            :number;
     res                   :string;
     display               : {__html: string};
 
@@ -26,7 +27,7 @@ export class Command {
         this.G = G;
         this.rawtext_unsafe = input;
         this.text = this.sanitize();
-        [this.args, this.error_code, this.res] = this.parse_and_run();
+        [this.args, this.errorCode, this.res] = this.parse_and_run();
         
         this.display = this.displayify();
     }
@@ -35,16 +36,16 @@ export class Command {
     }
     parse_and_run(): [string[], number, string] {
         let args = this.parse(this.text)
-        let [error_code, res] = this.run(args);
+        let [errorCode, res] = this.run(args);
 
-        return [args, error_code, res];
+        return [args, errorCode, res];
     }
     parse(text :string) :string[] {
         let args = this.text.split(" ");
         return args
     }
     run(args :string[]) :[number, string] {
-        let error_code = 0;
+        let errorCode = 0;
         
         const _args0 = CMD_ALIASES[args[0]] ?? args[0];
         let _args :string[] = PARAM_ALIASES[_args0] ? args.map((v) => (PARAM_ALIASES[_args0][v] ?? v)) : [...args];
@@ -54,19 +55,23 @@ export class Command {
         const doEffects = true;
         const effect = (fn :Function) => {if (doEffects) fn()}
 
+        const [currentMap, setCurrentMap] = this.G.currentMap;
+        const [currentRoom, setCurrentRoom] = this.G.currentRoom;
+        const [evidence, setEvidence] = this.G.evidence;
+
         switch (_args[0]) {
             case "echo" : 
                 switch (true) {
                     case (!_args[1]) :
-                        error_code = 100;
+                        errorCode = 100;
                         break;
                     default : 
-                        error_code = 0;
+                        errorCode = 0;
                 }   
                 break; 
 
             case "clear" :
-                error_code = 0;
+                errorCode = 0;
                 effect(() => {
                     const [_, setTerminalLog] = this.G.terminalLog;
                     setTerminalLog(Array(0));
@@ -75,33 +80,34 @@ export class Command {
                 break;
             
             case "go" :
+                
+                const [record, setRecord] = this.G.record;
+                const allowedDirections = ["north", "south", "east", "west"];
+                
+                let trackRoom = World[currentMap][currentRoom];
+                ret.push(trackRoom.name) // return [0] as starting room
                 if (!_args[1]) {
-                    error_code = 100;
+                    errorCode = 100;
                     break;
                 }
                 if (_args[1] === "help") {
-                    error_code = 1;
+                    errorCode = 1;
                     break;
                 }
-                const [currentMap, setCurrentMap] = this.G.currentMap;
-                const [currentRoom, setCurrentRoom] = this.G.currentRoom;
-                const [record, setRecord] = this.G.record;
-                const allowedDirections = ["north", "south", "east", "west"];
-                let trackRoom = World[currentMap][currentRoom];
                 for (let i = 1; i < _args.length; i ++) {
                     if (!allowedDirections.includes(_args[i])) {
-                        error_code = 102; // 102: Bad Direction
+                        errorCode = 102; // 102: Bad Direction
                         ret.push(args[i]);
                         break;
                     }
                     trackRoom = World[currentMap][World[currentMap][trackRoom.name][_args[i]]];
                     if (!trackRoom) {
-                        error_code = 101; // 101: Disallowed Direction
+                        errorCode = 101; // 101: Disallowed Direction
                         ret.push(args[i]);
                         break;
                     } 
-                } if (error_code == 0) {
-                    ret.push(trackRoom.name)
+                } if (errorCode === 0) {
+                    ret.push(`${trackRoom.diisplayName}(${trackRoom.name})`)
                     effect(() => {
                         setCurrentRoom(trackRoom.name);
                     })
@@ -109,9 +115,40 @@ export class Command {
 
                 break;
 
+            case "take":
+                const [interactableEvidence, setInteractableEvidence] = this.G.interactableEvidence;
+                
+                if (!interactableEvidence.some((pieceOfEvidenceWithLocation) => 
+                    pieceOfEvidenceWithLocation.map === currentMap &&
+                    pieceOfEvidenceWithLocation.room === currentRoom 
+                )) {
+                    errorCode = 1; //nothing to take
+                    break;
+                }
+
+                
+                let toPutInInventory: Evidence[] = [];
+                const remainingInteractableEvidence = interactableEvidence.filter((pieceOfEvidenceWithLocation) => {
+                    if (pieceOfEvidenceWithLocation.map !== currentMap) return true;
+                    if (pieceOfEvidenceWithLocation.room !== currentRoom) return true;
+                    
+                    toPutInInventory.push(pieceOfEvidenceWithLocation.evidence);
+                    return false;
+                })
+                
+                errorCode = 0;
+                ret.push(String(toPutInInventory.map((pieceOfEvidence) => pieceOfEvidence.displayName)));
+
+                effect(() => {
+                    setInteractableEvidence(remainingInteractableEvidence);
+                    setEvidence([...evidence].concat([...toPutInInventory]));
+                }) 
+                          
+                break;
+
             case "db-put" : 
                 if (!_args[1]) {
-                    error_code = 100;
+                    errorCode = 100;
                     break;
                 }
                 effect(() => {
@@ -122,7 +159,7 @@ export class Command {
 
             case "db-tp" : 
                 if (!_args[1]) {
-                    error_code = 100;
+                    errorCode = 100;
                     break;
                 }
                 effect(() => {
@@ -132,22 +169,22 @@ export class Command {
                 break;
             
             default : 
-                error_code = 200;
+                errorCode = 200;
                 break;
         }
-        let res :string = (RES[_args[0]] ?? RES["default"])[error_code](args, ret);
-        return [error_code, res];
+        let res :string = (RES[_args[0]] ?? RES["default"])[errorCode](args, ret);
+        return [errorCode, res];
     }
     displayify() {
 
         let style = "";
         let prefix = "";
         switch (true) {
-            case this.error_code >= 200: 
+            case this.errorCode >= 200: 
                 style = "color: var(--rgb-text-error)";
                 prefix = "⁇";
                 break;
-            case this.error_code >= 100: 
+            case this.errorCode >= 100: 
                 style = "color: var(--rgb-text-warning)";
                 prefix = "?";
                 break;    
@@ -176,11 +213,16 @@ const RES :IRes = {
     },
 
     "go" : {
-        0: (args, ret) => `Went "${args.slice(1).join(", ")}". You are now in "${ret[0]}".`,
-        1: () => "Usage: go <{north, south, east, west}>...<br/>You can specify multiple directions at once to walk in a path.",
-        100: () => "Please provide direction(s) to go.<br/>Usage: go <{north, south, east, west}>...",
-        101: (_, ret) => `"${ret[0]}" is not a valid direction on this path.`,
-        102: (_, ret) => `"${ret[0]}" is not a valid direction. Try north, south, east, or west.`,
+        0: (args, ret) => `Went "${args.slice(1).join(", ")}". You are now in "${ret[1]}".`,
+        1: (_, ret) => `You are in "${ret[0]}"<br/>Usage: go <{north, south, east, west}>...<br/>You can specify multiple directions at once to walk in a path.`,
+        100: (_, ret) => `You are in "${ret[0]}"<br/>Please provide direction(s) to go.<br/>Usage: go <{north, south, east, west}>...`,
+        101: (_, ret) => `"${ret[1]}" is not a valid direction on this path.`,
+        102: (_, ret) => `"${ret[1]}" is not a valid direction. Try north, south, east, or west.`,
+    },
+
+    "take" : {
+        0 : (_, ret) => `Took "${ret[0]}".`, 
+        1 : () => "There's nothing in this room to take.",
     },
 
     "db-put" : {
