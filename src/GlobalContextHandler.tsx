@@ -1,14 +1,20 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react";
 import { Command } from "./sections/TerminalCommands";
-import { gameFlagList } from "./game/FlagList";
+import { gameFlagList } from "./game/GameFlagList";
+import { gameConfigList, gameConfigListT } from "./game/GameConfigList";
 
 function GlobalContextHandler(props: PropsWithChildren) {
+
+    const gameFlags = useState(gameFlagList);
+    const gameConfig = useState(gameConfigList);
 
     const terminalLog = useState<Command[]>([]);
     const terminalLine = useState("");
     const record = useState("");
     const currentInterface = useState<string|null>(null);
-    const memo = useState(["", "", "", "", ""]);
+    const memo = useState(
+        Array.from({length: gameConfig[0].memoLength}).map(() => "")
+    );
     const memoPage = useState(0);
 
     const currentMap = useState("long-beach-gazette-main-office");
@@ -28,10 +34,10 @@ function GlobalContextHandler(props: PropsWithChildren) {
         tEvidence("utah-teapot", "prototype"),
     ]);
 
-    const gameFlags = useState(gameFlagList);
+    
 
     const interactableEvidence:any = useState([
-        {evidence: tEvidence("newspaper-article-smuggling", "prototype"), room: "rec", map: "long-beach-gazette-main-office"}
+        {evidence: tEvidence("newspaper-article-carjacking", "prototype"), room: "rec", map: "long-beach-gazette-main-office"}
     ]);
 
     return (
@@ -49,6 +55,7 @@ function GlobalContextHandler(props: PropsWithChildren) {
             "evidence": evidence,
             "interactableEvidence": interactableEvidence,
             "imgIcons" : imgIcons,
+            "gameConfig": gameConfig,
             "gameFlags": gameFlags
         }}>
             {props.children}
@@ -75,6 +82,7 @@ export type GlobalSingleton = {
     evidence: State<Evidence[]>,
     interactableEvidence: State<EvidenceWithLocation[]>,
     imgIcons: State<string[]>,
+    gameConfig: State<gameConfigListT>,
     gameFlags: State<Record<string, boolean>>,
 }
 export type State<T> = [T, React.Dispatch<React.SetStateAction<T>>];

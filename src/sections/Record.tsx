@@ -5,7 +5,7 @@ import Typewriter from "../components/Typewriter";
 import Storyboard from "../game/Storyboard";
 
 export default function Record() {
-    const charDelay = 1; //35;
+    const charDelay = 25;
     const refRecord = useRef<HTMLElement>(null);
 
     const [record, setRecord] = useGlobal().record;

@@ -39,15 +39,15 @@ const _E :Record<string, Evidence> = {
         type: "document",
         desc: "---\nHayu.\nSan Diego carjacking. H4KT01E34. Please follow up.\n-E",
     },
-    "newspaper-article-smuggling": {
-        name: "newspaper-article-smuggling",
+    "newspaper-article-carjacking": {
+        name: "newspaper-article-carjacking",
         cmdAliases: ["na", "newspaper-article"],
         displayName: "Newspaper Article",
 
-        origin: "Purchased myself.",
+        origin: "Printed myself.",
         icon: "📰",
         type: "document",
-        desc: "An article from the San Diego Times about a carjacking, involving the arrest of Ernesto Hererra.",
+        desc: "An article from the San Diego Times about a carjacking, involving the arrest of Alejandro Perez.",
     },
 
 }
@@ -62,8 +62,8 @@ export const EvidenceList  :Record<string, Record<string, Evidence>> = {
     "email-tip-estrella" : {
         "prototype": {..._E["email-tip-estrella"]}
     },
-    "newspaper-article-smuggling" : {
-        "prototype": {..._E["newspaper-article-smuggling"]}
+    "newspaper-article-carjacking" : {
+        "prototype": {..._E["newspaper-article-carjacking"]}
     }
 }
 export interface Evidence {

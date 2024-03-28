@@ -240,11 +240,11 @@ function InterfaceMemo() {
     const [memo, setMemo] = useGlobal().memo;
     const [memoPage, setMemoPage] = useGlobal().memoPage;
     const [currentMemo, setCurrentMemo] = useState("");
-    const maxMemoLength = 5;
+    const [gameConfig, setgameConfig] = useGlobal().gameConfig;
+    const memoLength = gameConfig.memoLength;
 
     useEffect(() => {
         setCurrentMemo(memo[memoPage]);
-        console.log(memo);
     }, [memoPage]);
 
     useEffect(() => {
@@ -263,9 +263,13 @@ function InterfaceMemo() {
                     {currentMemo !== "" ? 
                     <button className="" onClick={() => {setCurrentMemo("")}}>{t("interface/memo/clear-button")}</button>
                     : null}
-                    <button className="" onClick={() => {setMemoPage((memoPage - 1 + maxMemoLength) % maxMemoLength)}}>{t("interface/memo/previous-button")}</button>
-                    <span>{memoPage + 1}</span>
-                    <button className="" onClick={() => {setMemoPage((memoPage + 1) % maxMemoLength)}}>{t("interface/memo/next-button")}</button>
+                    <button className="" onClick={() => {setMemoPage((memoPage - 1 + memoLength) % memoLength)}}>{t("interface/memo/previous-button")}</button>
+                    <span>{memo.map((v, i) => {
+                        if (i === memoPage) return '📝';
+                        if (v === "") return '◽'; 
+                        return '◾';
+                    })}</span>
+                    <button className="" onClick={() => {setMemoPage((memoPage + 1) % memoLength)}}>{t("interface/memo/next-button")}</button>
                 </div>  
                 
             </div>

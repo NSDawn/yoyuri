@@ -92,7 +92,15 @@ const Story :Record<string, Record<number, string>> = {
 | - (No clue why they had to put the printer in here.)
 | - (Let me grab the email...⑤ and the article she sent over.)
 |
-        `
+        `,
+        1: `
+| HAKAHILO
+| - (Carjacking... San Diego...)
+| - (...Suspect apprehended in San Diego after...⑤ stealing a car in Tijuana...?)⑳
+| - (That's...⑤ odd...)⑤
+| - (Better give this a thorough read-through later.)
+|
+        `,
     }
 }
 
@@ -108,7 +116,7 @@ function storyPrepareString(s: string): string {
         .replaceAll("⑩", "          ")
         .replaceAll("⑮", "               ")
         .replaceAll("⑳", "                    ")
-        .replaceAll("㉕", "      \                   ")
+        .replaceAll("㉕", "                          ")
         .replaceAll("㊿", "                                                  ")
         .replaceAll("<back>", "<span class='back'>")
         .replaceAll("</back>", "</span>")
