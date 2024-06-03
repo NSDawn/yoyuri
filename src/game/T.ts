@@ -11,6 +11,12 @@ const T :Record<string, string> = {
     "interface/memo/previous-button": "<-",
     "interface/memo/clear-button": "🗑",
     
+    "menu/options": "options",
+    "menu/options/h": "OPTIONS",
+    "menu/save": "save",
+    "menu/save/h": "SAVE",
+
+
 }
 
 export default T;

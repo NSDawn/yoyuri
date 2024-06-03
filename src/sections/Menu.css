@@ -4,4 +4,49 @@ section.menu {
     font-weight: normal;
 
     background-color: var(--rgb-bg);
+    overflow: hidden;
+
+    & button {
+        all: unset;
+        font-family: VictorMono, NotoEmoji;
+        font-style: normal;
+        margin: 0.5rem;
+        outline: var(--rgb-ui) dashed 0.1rem;
+        padding: 0.25rem;
+
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+
+        &:focus {
+            outline: var(--rgb-ui-select) solid 0.1rem;
+        }
+
+        &.current, &.current:hover {
+            outline: var(--rgb-ui) solid 0.2rem;
+            transform: scale(1);
+            /* playtest later */
+            cursor: auto;
+        }
+    }
+
+    & div.screen {
+        height: 0%;
+        overflow: scroll;
+        transition: ease-in-out 0.15s;
+    
+        &.current {
+            height: 100%;
+            margin: 0rem;
+            padding: 0.5rem;
+        }
+    }
+
+    & h2 {
+        line-height: 1.5rem;
+        font-size: 1.5rem;
+        margin: 0.5rem 0;
+    }
 }
+

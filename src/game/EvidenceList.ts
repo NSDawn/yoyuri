@@ -28,6 +28,9 @@ const _E :Record<string, Evidence> = {
         icon: "🫖",
         type: "artifact",
         desc: "A refined item of exemplary design.",
+        inspectDesc: `
+| The Utah teapot, or the Newell teapot, is a 3D test model that has become a standard reference object and an in-joke[1] within the computer graphics community. It is a mathematical model of an ordinary Melitta-brand teapot that appears solid with a nearly rotationally symmetrical body. Using a teapot model is considered the 3D equivalent of a "Hello, World!" program, a way to create an easy 3D scene with a somewhat complex model acting as the basic geometry for a scene with a light setup. Some programming libraries, such as the OpenGL Utility Toolkit,[2] even have functions dedicated to drawing teapots.
+        `
     },
     "email-tip-estrella": {
         name: "email-tip-estrella",
@@ -48,6 +51,10 @@ const _E :Record<string, Evidence> = {
         icon: "📰",
         type: "document",
         desc: "An article from the San Diego Times about a carjacking, involving the arrest of Alejandro Perez.",
+        inspectDesc: `
+| SAN DIEGO, CA. MEXICAN MALE ALEJANDRO PEREZ WAS BROUGHT IN LOREM IPSUM SIT DOLOR AMET. EGU EGJ EEMOWAFE DSOKFAE AFMDOSMAFOD GEJAOSD FKEWAFODSA MDFMODSAF MEOWADE AWFEW.
+|
+        `
     },
 
 }
@@ -75,4 +82,5 @@ export interface Evidence {
     icon :string,
     type :string,
     desc :string,
+    inspectDesc?: string,
 }

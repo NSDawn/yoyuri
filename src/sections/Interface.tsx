@@ -243,6 +243,8 @@ function InterfaceMemo() {
     const [gameConfig, setgameConfig] = useGlobal().gameConfig;
     const memoLength = gameConfig.memoLength;
 
+    const pageNumberCharacters = ["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
+
     useEffect(() => {
         setCurrentMemo(memo[memoPage]);
     }, [memoPage]);
@@ -270,6 +272,9 @@ function InterfaceMemo() {
                         return '◾';
                     })}</span>
                     <button className="" onClick={() => {setMemoPage((memoPage + 1) % memoLength)}}>{t("interface/memo/next-button")}</button>
+                    <span>
+                        {pageNumberCharacters[memoPage]}
+                    </span>
                 </div>  
                 
             </div>

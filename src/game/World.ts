@@ -1,4 +1,4 @@
-export const WorldDisplay :Record<string, RoomDisplay> = {
+export const WorldDisplay :Record<string, Location> = {
     "long-beach-gazette-main-office": {
         template: (
             `
@@ -50,7 +50,7 @@ export const WorldDisplay :Record<string, RoomDisplay> = {
 };
 
 
-export interface RoomDisplay {
+export interface Location {
     displayName: string,
     template: string,
     rooms: string[],
@@ -122,15 +122,15 @@ export type Room = Record<string, string>
 import { Profile } from "./ProfileList";
 
 export type PlaceChar = [profile: Profile, room: string]
-export function renderRoomTemplate(roomDisplay: RoomDisplay, placeChars: PlaceChar[]): string {
-    let rm = roomDisplay.template;
+export function renderRoomTemplate(location: Location, placeChars: PlaceChar[]): string {
+    let rm = location.template;
     
     const default_val = "   ";
-    let slotInserts: string[] = Array(roomDisplay.slots * roomDisplay.rooms.length).fill(default_val);
+    let slotInserts: string[] = Array(location.slots * location.rooms.length).fill(default_val);
     for (let place of placeChars) {
-        let idx = roomDisplay.rooms.indexOf(place[1]) * roomDisplay.slots;
+        let idx = location.rooms.indexOf(place[1]) * location.slots;
         //console.log(roomDisplay.slots);
-        for (let i = 0; i < roomDisplay.slots; i ++) {
+        for (let i = 0; i < location.slots; i ++) {
             if (slotInserts[idx + i] === default_val) {
                 slotInserts[idx + i] = `<span class="map-point-of-interest" data-display-name="${place[0].displayName}" data-cmd-alias="${place[0].cmdAliases[0]}">[${place[0].mapChar}]</span>`;
                 break;
@@ -146,9 +146,9 @@ export function renderRoomTemplate(roomDisplay: RoomDisplay, placeChars: PlaceCh
     
     rm = rm.replaceAll("#", "<span style='color: var(--rgb-ui)'>#</span>");
 
-    if (roomDisplay.isLargeMap) {
-        for (let i in roomDisplay.rooms) {
-            rm = rm.replace("×", `<span class="map-point-of-interest" data-display-name="${roomDisplay.roomDisplayNames[i]}" data-cmd-alias="${roomDisplay.rooms[i]}">!_REPLACE_!</span>`);
+    if (location.isLargeMap) {
+        for (let i in location.rooms) {
+            rm = rm.replace("×", `<span class="map-point-of-interest" data-display-name="${location.roomDisplayNames[i]}" data-cmd-alias="${location.rooms[i]}">!_REPLACE_!</span>`);
         }
         rm = rm.replaceAll("!_REPLACE_!", "×")
     }
@@ -156,5 +156,11 @@ export function renderRoomTemplate(roomDisplay: RoomDisplay, placeChars: PlaceCh
     return rm;
 }
 
+
+export function getRoomDisplayName(locationName: string, roomName: string): string {
+    if (!WorldDisplay[locationName]) return "";
+    if (!WorldDisplay[locationName].rooms.includes(roomName)) return "";
+    return WorldDisplay[locationName].roomDisplayNames[WorldDisplay[locationName].rooms.indexOf(roomName)];
+}
 
 export default World;

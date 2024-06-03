@@ -59,8 +59,18 @@ const Story :Record<string, Record<number, string>> = {
         ,
 
     },
-    "potat": {
-
+    "inspect-evidence": {
+        0: `
+| HAKAHILO
+| - (Let me check this out...) ⑩
+| - (Nothing...⑩ really of note...)
+|
+        `,
+        1: `
+| HAKAHILO
+| - (Let's get a better look at this...) ⑩
+|
+        `
     },
     "1-1-longbeachgazette-main-0": {
         0: `
@@ -110,7 +120,7 @@ for (let div in Story) {
     }
 }
 
-function storyPrepareString(s: string): string {
+export function storyPrepareString(s: string): string {
     return s
         .replaceAll("⑤", "     ")
         .replaceAll("⑩", "          ")

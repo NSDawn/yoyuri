@@ -1,7 +1,8 @@
 import { GlobalSingleton, useGlobal } from "../GlobalContextHandler";
-import { World } from "../game/World";
+import { World, getRoomDisplayName } from "../game/World";
 import { useState } from "react";
 import { Evidence } from "../game/EvidenceList";
+import Story, {storyPrepareString} from "../game/Story";
 
 export default function TerminalCommand() {
     let G = useGlobal();
@@ -32,7 +33,14 @@ export class Command {
         this.display = this.displayify();
     }
     sanitize() {
-        return this.rawtext_unsafe.replace(/</g, "&lt;").replace(/>/g, "&gt;").trim();
+        let s = this.rawtext_unsafe;
+        while (s.includes("  ")) s = s.replace("  ", " ");
+        s = s
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .trim()
+        ;
+        return s;
     }
     parse_and_run(): [string[], number, string] {
         let args = this.parse(this.text)
@@ -107,7 +115,8 @@ export class Command {
                         break;
                     } 
                 } if (errorCode === 0) {
-                    ret.push(`${trackRoom.diisplayName}(${trackRoom.name})`)
+                    
+                    ret.push(`${getRoomDisplayName(currentMap, trackRoom.name)} (${trackRoom.name})`)
                     effect(() => {
                         setCurrentRoom(trackRoom.name);
                     })
@@ -145,6 +154,35 @@ export class Command {
                 }) 
                           
                 break;
+            case "inspect": 
+                if (!_args[1]) {
+                    errorCode = 100;
+                    break;
+                }
+                let selectedEvidence: Evidence | null = null;
+                for (let piece of evidence) {
+                    if (piece.cmdAliases.includes(_args[1])) {
+                        selectedEvidence = piece
+                        break;
+                    };
+                }
+                if (!selectedEvidence) {
+                    errorCode = 101;
+                    break;
+                }
+                ret.push(selectedEvidence.displayName);
+                effect(() => {
+                    const [record, setRecord] = this.G.record;
+                    if (selectedEvidence?.inspectDesc) {
+                        const addToRecord = storyPrepareString(Story["inspect-evidence"][1] + selectedEvidence?.inspectDesc)
+                        setRecord(record + addToRecord);
+                        
+                        return;
+                    }
+                    setRecord(record + Story["inspect-evidence"][0]);
+                })
+                errorCode = 0;
+                break;
 
             case "db-put" : 
                 if (!_args[1]) {
@@ -168,7 +206,9 @@ export class Command {
                 })
                 break;
             
-            default : 
+            
+
+            default: 
                 errorCode = 200;
                 break;
         }
@@ -224,6 +264,12 @@ const RES :IRes = {
         0 : (_, ret) => `Took "${ret[0]}".`, 
         1 : () => "There's nothing in this room to take.",
     },
+    
+    "inspect" : {
+        0: (args, ret) => `Inspected "${ret[0]}" (${args[1]}).`,
+        100: () => "Please provide something to inspect.",
+        101: (args) => `You don't have a piece of evidence named "${args[1]}".`,
+    },
 
     "db-put" : {
         0 : (args) => `[Debug] Put "${args.slice(1).join(" ")}" on the record.`,
@@ -234,6 +280,8 @@ const RES :IRes = {
         0 : (args) => `[Debug] Attempted to teleport to "${args[1]}".`,
         100 : () => "Please provide a room to teleport to.",
     },
+
+    
 
     "default" : {
         200: (args) => `Sorry, I don't know what you mean by "${args[0]}".`
@@ -254,6 +302,10 @@ const CMD_ALIASES: Record<string, string> = {
 
     "t": "take",
     "take": "take",
+
+    "inspect": "inspect",
+    "check": "inspect",
+    "i": "inspect",
 
     "db-put": "db-put",
     "db-tp" : "db-tp",

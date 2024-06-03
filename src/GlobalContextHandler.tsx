@@ -22,7 +22,9 @@ function GlobalContextHandler(props: PropsWithChildren) {
 
     const isRecordAnimating = useState(false);
     const imgIcons = useState(["", ""])
-
+        
+    const currentMenuComponent = useState<string|null>(null);
+    
     const profiles = useState([
         tProfile("hayu-te-hakahilo", "prototype"),
         tProfile("wesley-uehara", "prototype"),
@@ -55,8 +57,10 @@ function GlobalContextHandler(props: PropsWithChildren) {
             "evidence": evidence,
             "interactableEvidence": interactableEvidence,
             "imgIcons" : imgIcons,
+            "currentMenuComponent": currentMenuComponent,
             "gameConfig": gameConfig,
             "gameFlags": gameFlags
+            
         }}>
             {props.children}
         </GlobalContext.Provider>
@@ -82,6 +86,7 @@ export type GlobalSingleton = {
     evidence: State<Evidence[]>,
     interactableEvidence: State<EvidenceWithLocation[]>,
     imgIcons: State<string[]>,
+    currentMenuComponent: State<string | null>,
     gameConfig: State<gameConfigListT>,
     gameFlags: State<Record<string, boolean>>,
 }
@@ -103,7 +108,7 @@ export function tStory(s: string, n = 0) : string {
     return Story[s][n] ?? "";
 }
 
-import {WorldDisplay, RoomDisplay, renderRoomTemplate, Room, PlaceChar} from "./game/World";
+import {WorldDisplay, Location, renderRoomTemplate, Room, PlaceChar} from "./game/World";
 export function tRoom(room: string, placeChars: PlaceChar[]) : string {
     return renderRoomTemplate(WorldDisplay[room], placeChars);
 }

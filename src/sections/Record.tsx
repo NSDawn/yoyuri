@@ -5,12 +5,14 @@ import Typewriter from "../components/Typewriter";
 import Storyboard from "../game/Storyboard";
 
 export default function Record() {
-    const charDelay = 25;
     const refRecord = useRef<HTMLElement>(null);
 
     const [record, setRecord] = useGlobal().record;
+    const [gameConfig, setGameConfig] = useGlobal().gameConfig;
     const [isRecordAnimating, setIsRecordAnimating] = useGlobal().isRecordAnimating;
     const [imgIcons, setImgIcons] = useGlobal().imgIcons;
+    
+    const charDelay = gameConfig.recordCharDelay;
 
     /* for debugging purposes */
     useEffect(() => {
@@ -29,12 +31,15 @@ export default function Record() {
         }
         return () => {
           clearInterval(intervalId);
+          scrollRecordAllTheWayDown();
         };
     }, [isRecordAnimating]);
 
     const pushToRecord = (s: string) => {
         setRecord(record + s)
     }
+
+    
 
     return (
         <section className={`record ${isRecordAnimating ? "noscroll unselectable": ""}`} ref={refRecord}>
