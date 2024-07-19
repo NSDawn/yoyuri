@@ -16,7 +16,7 @@ export default function Record() {
 
     /* for debugging purposes */
     useEffect(() => {
-        setRecord(tStory("1-1-longbeachgazette-main-0", 0))
+        setRecord(tStory("1-1-longbeachgazette-main-0", 0));
     }, []);
 
     const scrollRecordAllTheWayDown = () => {
@@ -44,7 +44,7 @@ export default function Record() {
     return (
         <section className={`record ${isRecordAnimating ? "noscroll unselectable": ""}`} ref={refRecord}>
             <img 
-                className="face-icon" 
+                className="face-icon five-color-palette" 
                 src={getImgIconAssetsPath(imgIcons[0])} 
                 alt={`speaker icon ${imgIcons[0]}`} 
             />
@@ -63,7 +63,7 @@ export default function Record() {
 }
 
 
-const validPeople = ["wesley"]
+const validPeople = ["wesley", "hayu", "missing"]
 function getImgIconAssetsPath(filename: string): string {
     let [out_person, out_expression] = filename.split("_");
     if (!validPeople.includes(out_person)) out_person = "missing";

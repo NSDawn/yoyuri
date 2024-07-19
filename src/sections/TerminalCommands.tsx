@@ -66,6 +66,7 @@ export class Command {
         const [currentMap, setCurrentMap] = this.G.currentMap;
         const [currentRoom, setCurrentRoom] = this.G.currentRoom;
         const [evidence, setEvidence] = this.G.evidence;
+        const [currentInterface, setCurrentInterface] = this.G.currentInterface;
 
         switch (_args[0]) {
             case "echo" : 
@@ -91,6 +92,8 @@ export class Command {
                 
                 const [record, setRecord] = this.G.record;
                 const allowedDirections = ["north", "south", "east", "west"];
+                
+                setCurrentInterface("map");
                 
                 let trackRoom = World[currentMap][currentRoom];
                 ret.push(trackRoom.name) // return [0] as starting room
@@ -119,6 +122,7 @@ export class Command {
                     ret.push(`${getRoomDisplayName(currentMap, trackRoom.name)} (${trackRoom.name})`)
                     effect(() => {
                         setCurrentRoom(trackRoom.name);
+                        
                     })
                 }
 
@@ -160,6 +164,9 @@ export class Command {
                     break;
                 }
                 let selectedEvidence: Evidence | null = null;
+
+                setCurrentInterface("evidence");
+
                 for (let piece of evidence) {
                     if (piece.cmdAliases.includes(_args[1])) {
                         selectedEvidence = piece

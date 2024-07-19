@@ -4,12 +4,13 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Interface() {
     
-    const interfaces = ["evidence", "profiles", "map", "memo"];
+    const interfaces = ["evidence", "profiles", "map", "memo", "info"];
     let interfacesComponents: Record<string, React.ReactElement> = {
-        "evidence" : <InterfaceEvidence />,
-        "profiles" : <InterfaceProfiles />,
-        "map" :      <InterfaceMap />,
-        "memo" :     <InterfaceMemo />,
+        "evidence" :    <InterfaceEvidence />,
+        "profiles" :    <InterfaceProfiles />,
+        "map" :         <InterfaceMap />,
+        "memo" :        <InterfaceMemo />,
+        "info" :        <InterfaceInfo />,
     }
     const [currentInterface, setCurrentInterface] = useGlobal().currentInterface;
     // set interface onload.
@@ -284,6 +285,51 @@ function InterfaceMemo() {
                 onInput={e => setCurrentMemo((e.target as any).value)}
             />
         
+        </>
+    )
+}
+
+import { Info, getInfo } from "../game/InfoList";
+function InterfaceInfo() {
+
+    const [gameConfig, setgameConfig] = useGlobal().gameConfig;
+    const [query, setQuery] = useState("");
+    const [title, setTitle] = useState("");
+    const [sprite, setSprite] = useState("default");
+    const [textHTML, setTextHTML] = useState("butts");
+    const [isEffectiveQuery, SetIsEffectiveQuery] = useState(false);
+
+    useEffect(() => {
+        const info = getInfo(query);
+        setTitle(info.name); 
+        setSprite(info.sprite);
+        setTextHTML(info.textHTML);
+        SetIsEffectiveQuery(info.isSuccess);
+    }, [query])
+    
+    return (
+        <>
+            
+            <h2>{t("interface/info/h")}</h2> 
+            
+            <input 
+                type="text"
+                placeholder={t("interface/info/searchbar-placeholder")}
+                className={(isEffectiveQuery ? "success" : "error")}
+                onChange={(event) => {setQuery(event.target.value)}}
+                spellCheck={false}
+            />
+
+            <h3>{title}</h3>
+
+            <img 
+                className={`sprite five-color-palette ${query === "" ? "hidden" : ""}`}
+                src={`/assets/img/sprites/${sprite}.png`} alt={`${title} icon`} 
+            /> 
+
+            <div 
+                dangerouslySetInnerHTML={{__html: textHTML}}
+            />
         </>
     )
 }

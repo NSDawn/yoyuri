@@ -4,13 +4,9 @@ section.record {
     overflow-y: scroll; overflow-x: hidden;
     scrollbar-gutter: stable;
     z-index: 1;
-
+    background-color: var(--rgb-bg);
     text-shadow:  -0.1rem -0.2rem 0.2rem var(--rgb-bg), 0rem -0.2rem 0.2rem var(--rgb-bg), 0.1rem -0.2rem 0.2rem var(--rgb-bg);
-    & ::selection {
-        color: var(--rgb-bg);
-        background-color: var(--rgb-text);
-        text-shadow: none;
-    }
+    
 }
 section.record span.back {
     display: inline-block;

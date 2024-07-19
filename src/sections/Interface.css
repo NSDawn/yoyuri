@@ -117,6 +117,27 @@ section.interface .map {
     }
 }
 
+section.interface .info {
+    & input {
+        color: var(--rgb-text-success);
+        &.error {
+            color: var(--rgb-text-error);
+        }
+    }
+    & .sprite {
+        width: 10rem;
+        height: 10rem;
+        float: right;
+        margin-left: 1rem;
+        margin-bottom: 1rem;
+        outline: 0.1rem var(--rgb-text) solid;
+        transition: ease-in-out 0.15s;
+        &.hidden {
+            outline: 0rem var(--rgb-text) solid;
+            height: 0rem;
+        }
+    }
+}
 
 .memo-header-wrapper {
     display: flex;

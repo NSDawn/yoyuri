@@ -5,12 +5,14 @@ import Record from './sections/Record';
 import Menu from './sections/Menu';
 import Terminal from './sections/Terminal';
 import KeyboardShortcutHandler from './components/KeyboardShortcutHandler';
+import { useGlobal } from './GlobalContextHandler';
 
 function App() {
-  const [count, setCount] = useState(0);
+
+  const [gameConfig, setGameConfig] = useGlobal().gameConfig;
 
   return (
-    <>
+    <div className={`app ${gameConfig.colorTheme}`}>
       <KeyboardShortcutHandler />
       <main>
         <Interface />
@@ -18,7 +20,7 @@ function App() {
         <Menu />
         <Terminal />
       </main>
-    </>
+    </div>
   );
 }
 

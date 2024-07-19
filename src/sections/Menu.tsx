@@ -44,9 +44,10 @@ export default function Menu() {
 }
 
 function MenuOptions() {
-    const optionKeys = ["recordTextSpeed"];
+    const optionKeys = ["recordTextSpeed", "colorTheme"];
     const [gameConfig, setGameConfig] = useGlobal().gameConfig;
     const [recordTextSpeed, setRecordTextSpeed] = useState("medium");
+    const [colorTheme, setColorTheme] = useState("theme-default");
     
     useEffect(() => {
         const charDelays: Record<string, number> = {
@@ -56,13 +57,18 @@ function MenuOptions() {
             "max": gameConfig._recordMinCharDelay,
         } 
         gameConfig.recordCharDelay = charDelays[recordTextSpeed];
-        setGameConfig(gameConfig);
+        setGameConfig({...gameConfig});
     }, [recordTextSpeed])
+
+    useEffect(() => {
+        gameConfig.colorTheme = colorTheme;
+        setGameConfig({...gameConfig});
+    }, [colorTheme])
 
     const options: Record<string, React.ReactElement> = {
         recordTextSpeed: 
             <MenuOptionStatefulButton
-                optionText = {"Text speed: "}
+                optionText = {t("menu/options/text-speed")}
                 states = {{
                     "slow": ">🐌...",
                     "medium": ">>🐢..",
@@ -72,7 +78,21 @@ function MenuOptions() {
                 stateVariableSetFunction={setRecordTextSpeed}
                 stateKeys = {["slow", "medium", "fast", "max"]}
             >
-            </MenuOptionStatefulButton>  
+            </MenuOptionStatefulButton>,
+        colorTheme:
+            <MenuOptionStatefulButton
+                optionText = {t("menu/options/color-theme")}
+                states = {{
+                    "theme-default": "🌙...",
+                    "theme-monokai": ".💫..",
+                    "theme-brownie": "..🍰.",
+                    "theme-light": "...💡",
+                }}
+                stateVariableSetFunction={setColorTheme}
+                stateKeys = {["theme-default", "theme-monokai", "theme-brownie", "theme-light"]}
+            >
+            </MenuOptionStatefulButton>,
+                
     }
 
     return (

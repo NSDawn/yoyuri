@@ -10,9 +10,14 @@ const T :Record<string, string> = {
     "interface/memo/next-button": "->",
     "interface/memo/previous-button": "<-",
     "interface/memo/clear-button": "🗑",
+    "interface/info": "info",
+    "interface/info/h": "INFORMATION",
+    "interface/info/searchbar-placeholder": "search something...",
     
     "menu/options": "options",
     "menu/options/h": "OPTIONS",
+    "menu/options/text-speed": "Text Speed: ",
+    "menu/options/color-theme": "Color Theme: ",
     "menu/save": "save",
     "menu/save/h": "SAVE",
 

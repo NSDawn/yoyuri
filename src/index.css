@@ -85,9 +85,6 @@
   font-style: normal;
   font-size: 14px;
 
-  color: var(--rgb-text);
-  background-color: var(--rgb-root-bg);
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -107,6 +104,85 @@
   --rgb-bg: #000000;
   --rgb-debug: #ff1fa2;
 
+}
+
+div.app {
+  color: var(--rgb-text);
+  background-color: var(--rgb-root-bg);
+
+  & ::selection {
+    color: var(--rgb-bg);
+    background-color: var(--rgb-text);
+    text-shadow: none;
+}
+}
+
+div.app.theme-default {
+  --rgb-text: #ffffff;
+  --rgb-text-back: #595555;
+  --rgb-ui: #53f936;
+  --rgb-ui-select: #52ffe5;
+
+  --rgb-text-error: #f44f4f;
+  --rgb-text-warning: #f9f152;
+  --rgb-text-success: #52ffe5;
+
+  --rgb-root-bg: #000000;
+  --rgb-bg: #000000;
+  --rgb-debug: #ff1fa2;
+
+  --palette-filter: sepia(75%) hue-rotate(70deg) saturate(1.5);
+}
+
+div.app.theme-monokai {
+  --rgb-text: #d6d6d6;
+  --rgb-text-back: #595555;
+  --rgb-ui: #6c99bb;
+  --rgb-ui-select: #e87d3e;
+
+  --rgb-text-error: #b05279;
+  --rgb-text-warning: #e5b567;
+  --rgb-text-success: #b4d273;
+
+  --rgb-root-bg: #3e3e3e;
+  --rgb-bg: #2e2e2e;
+  --rgb-debug: #ff1fa2;
+  
+  --palette-filter: none;
+}
+
+div.app.theme-brownie {
+  --rgb-text: #d4d2c1;
+  --rgb-text-back: #544d45;
+  --rgb-ui: #a9903d;
+  --rgb-ui-select: #e8a43e;
+
+  --rgb-text-error: #f18170;
+  --rgb-text-warning: #e5df67;
+  --rgb-text-success: #9cce32;
+
+  --rgb-root-bg: #533b22;
+  --rgb-bg: #3f372b;
+  --rgb-debug: #ff1fa2;
+
+  --palette-filter: sepia(100%) saturate(0.75) brightness(0.75);
+}
+
+div.app.theme-light {
+  --rgb-text: #302f2c;
+  --rgb-text-back: #817b75;
+  --rgb-ui: #200332;
+  --rgb-ui-select: #48005c;
+
+  --rgb-text-error: #a01a05;
+  --rgb-text-warning: #bcb300;
+  --rgb-text-success: #135203;
+
+  --rgb-root-bg: #cecece;
+  --rgb-bg: #e1e1e1;
+  --rgb-debug: #ff1fa2;
+  
+  --palette-filter: brightness(1.25) contrast(1.25);
 }
 
 input {
@@ -130,4 +206,8 @@ img {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+img.five-color-palette {
+  filter: var(--palette-filter);
 }

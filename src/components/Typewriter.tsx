@@ -32,8 +32,8 @@ export default function Typewriter({text, delay, isAnimatingFunction, imgIconsSt
                         cmd += textNow[imgIconTagIdx];
                         imgIconTagIdx ++;
                     }
-                    console.log(cmd);
                     let [_, imgIconIdx, imgIconFilename] = cmd.split(":");
+
                     let [imgIcons, setImgIcons] = imgIconsState;
                     let arr = [...imgIcons];
                     arr[parseInt(imgIconIdx)] = imgIconFilename;

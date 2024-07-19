@@ -79,7 +79,7 @@ const Story :Record<string, Record<number, string>> = {
 | LONG BEACH GAZETTE - MAIN⑤
 | ⑤- - - - - - - - - - - - - - - - -⑤
 |
-| HAKAHILO, HAYU TĒ
+| HAKAHILO, HAYU TĒ <I:0:hayu_neutral/>
 | - (Wesley insisted on waiting for me,⑤ huh.) ⑩
 | - (Good man.)⑤
 | - (I wouldn't have stayed so late, my work's done and sent, after all.)⑤
@@ -98,20 +98,38 @@ const Story :Record<string, Record<number, string>> = {
 | LONG BEACH GAZETTE - REC⑤
 | ⑤- - - - - - - - - - - - - - - - -⑤
 | 
-| HAKAHILO, HAYU TĒ
+| HAKAHILO, HAYU TĒ <I:0:hayu_neutral2/>
 | - (No clue why they had to put the printer in here.)
 | - (Let me grab the email...⑤ and the article she sent over.)
 |
         `,
         1: `
-| HAKAHILO
+| HAKAHILO <I:0:hayu_inquisitive2/>
 | - (Carjacking... San Diego...)
 | - (...Suspect apprehended in San Diego after...⑤ stealing a car in Tijuana...?)⑳
 | - (That's...⑤ odd...)⑤
 | - (Better give this a thorough read-through later.)
 |
         `,
+    },
+    "1-1-longbeachgazette-lobby-0": {
+        0: `
+| UEHARA <I:0:wesley_happy/>
+| - Hayu! 
+| - You...⑤ uh...⑩ all set to go, man?
+| 
+| HAKAHILO <I:0:hayu_neutral/>
+| - Yeah,⑤ just about. 
+|
+| UEHARA <I:0:wesley_neutral/>
+| - Something...⑤ the matter?⑤ You seem...⑩ not your normal self today. <I:0:wesley_neutral/>
+|
+| HAKAHILO <I:0:hayu_inquisitive/>
+| - It's nothing. 
+|
+        `
     }
+    
 }
 
 for (let div in Story) {
@@ -128,8 +146,8 @@ export function storyPrepareString(s: string): string {
         .replaceAll("⑳", "                    ")
         .replaceAll("㉕", "                          ")
         .replaceAll("㊿", "                                                  ")
-        .replaceAll("<back>", "<span class='back'>")
-        .replaceAll("</back>", "</span>")
+        .replaceAll("[B[", "<span class='back'>")
+        .replaceAll("]B]", "</span>")
         .replaceAll("| ", "<br />")
         .replaceAll("|", "<br />")
 }

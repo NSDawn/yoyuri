@@ -5,6 +5,7 @@ export const gameConfigList = {
     _recordFastCharDelay: 15,
     _recordMediumCharDelay: 28,
     _recordSlowCharDelay: 40,
+    colorTheme: "theme-light",
 }
 
 export type gameConfigListT = { 
@@ -14,4 +15,5 @@ export type gameConfigListT = {
     _recordFastCharDelay: number,
     _recordMediumCharDelay: number,
     _recordSlowCharDelay: number,
+    colorTheme: string,
 }
