@@ -1,6 +1,6 @@
 export const gameConfigList = { 
     memoLength: 6,
-    recordCharDelay: 25,
+    recordCharDelay: 28,
     _recordMinCharDelay: 4,
     _recordFastCharDelay: 15,
     _recordMediumCharDelay: 28,

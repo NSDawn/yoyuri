@@ -98,9 +98,12 @@ section.interface .map {
         position: relative;
         cursor: default;
         user-select: none;
+        line-height: 1.5vw;
 
         & > code {
             font-family: VictorMono;
+            font-size: 1vw;
+            
 
             & .map-point-of-interest {
                 

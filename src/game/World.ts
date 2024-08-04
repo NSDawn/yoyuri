@@ -11,7 +11,7 @@ export const WorldDisplay :Record<string, Location> = {
  │            #           │                    │
  │  [?] [?]   │  [?] [?]  └───────┬ lobby ─ # ─┤
  │            │                   │   [?] [?]  │
- └────────────┼ rr ─────────── # ─┼────────────┘
+ └────────────┼ rr ─────────── # ─┼───── # ────┘
               │                   │             
               │ [?] [?]           │             
               └───────────────────┘              
@@ -26,23 +26,27 @@ export const WorldDisplay :Record<string, Location> = {
     "long-beach": {
         template: (
             `
-                            1st av
-                            │
-                        [?] │
-────── route 1 ──────────── × ──────────────────────────────────────────
-                            │
-                            │
-                 [?]    [?] │             [?]           [?]
-──── highwater st ─ × ───── × ────────────── × ─────────── × ────────────────
-        ┌────────────┐      │    ┌────────────┐ ┌────────────┐
-        │            │      │    │            │ │            │
-        │     19     │      │    │     21     │ │     23     │
-        │            │      │    │            │ │            │
-        ╘════════════╛      │    ╘════════════╛ ╘════════════╛                                                          
+                            1st av                                                                               2nd av
+                            │                                                                                    │
+                        [?] │                                                                                [?] │
+────── route 1 ──────────── × ────────────────────────────────────────────────────────────────────────────────── × ────
+                            │                                        ┌────────────┐                              │
+                            │                                        │     24     │                              │
+                 [?]    [?] │             [?]           [?]          ╘════════════╛                              │
+──── highwater st ─ × ───── × ────────────── × ─────────── × ───────────────── × [?]                             │ 
+        ┌────────────┐      │    ┌────────────┐ ┌────────────┐ ┌────────────┐  │        ┌──────────────────────┐ │
+        │     19     │      │    │     21     │ │     23     │ │            │  │        │                      │ │
+        ╘════════════╛      │    ╘════════════╛ ╘════════════╛ │     25     │  ×        │          32          │ │
+                            │    ┌───────────────────────────┐ │            │  │ [?]    │                      │ │
+                            │    │                           │ ╘════════════╛  │        ╘══════════════════════╛ │
+                            │    │            27             │ × ───────────── × ── andrew ln ────── × ───────── ×
+                            │    │                           │   [?]          [?]                   [?]          │ [?]
+                            │    ╘═══════════════════════════╛                                                   │
+                            │                                                        
             `
         ),
-        rooms: ["route-1-&-1st-av", "19-highwater-st", "1st-av-&-highwater-st", "21-highwater-st", "23-highwater-st"],
-        roomDisplayNames: ["Route 1 & 1st Av", "19 Highwater St", "Highwater St & 1st Av", "21 Highwater St.", "23 Highwater St."],
+        rooms: ["route-1-&-1st-av", "route-1-&-2nd-av", "19-highwater-st", "highwater-st-&-1st-av", "21-highwater-st", "23-highwater-st", "24-highwater-st", "25-highwater-st", "27-andrew-ln", "highwater-st-&-andrew-ln", "32-andrew-ln", "andrew-ln-&-2nd-av"],
+        roomDisplayNames: ["Route 1 & 1st Av", "Route 1 & 2nd Av", "19 Highwater St [Long Beach Gazette]", "Highwater St & 1st Av", "21 Highwater St", "23 Highwater St", "24 Highwater St", "25 Highwater St", "27 Andrew Ln", "Highwater St & Andrew Ln", "32 Andrew Ln", "Andrew Ln & 2nd Av"],
         isLargeMap: true,
         slots: 1,
         displayName: "Long Beach",
@@ -84,6 +88,8 @@ export const World :Record<string, Record<string, Room>> = {
         "lobby" : {
             name: "lobby",
             north: "main",
+            south: "long-beach.19-highwater-st",
+            out: "long-beach.19-highwater-st",
         },
         "rr" : {
             name: "rr",
@@ -93,28 +99,64 @@ export const World :Record<string, Record<string, Room>> = {
     "long-beach": {
         "route-1-&-1st-av": {
             name: "route-1-&-1st-av",
-            south: "1st-av-&-highwater-st",
+            east: "route-1-&-2nd-av",
+            south: "highwater-st-&-1st-av",
+        }, 
+        "route-1-&-2nd-av": {
+            name: "route-1-&-2nd-av",
+            west: "route-1-&-1st-av",
+            south: "andrew-ln-&-2nd-av",
         }, 
         "19-highwater-st": {
             name: "19-highwater-st",
-            east: "1st-av-&-highwater-st",
+            east: "highwater-st-&-1st-av",
+            in: "long-beach-gazette-main-office.lobby",
         }, 
-        "1st-av-&-highwater-st": {
-            name: "1st-av-&-highwater-st",
+        "highwater-st-&-1st-av": {
+            name: "highwater-st-&-1st-av",
             west: "19-highwater-st",
             north: "route-1-&-1st-av",
             east: "21-highwater-st"
         }, 
         "21-highwater-st": {
             name: "21-highwater-st",
-            west: "1st-av-&-highwater-st",
+            west: "highwater-st-&-1st-av",
             east: "23-highwater-st",
         }, 
         "23-highwater-st" : {
             name: "23-highwater-st",
-            west: "21-highwater-st"
+            west: "21-highwater-st",
+            east: "24-highwater-st"
         },
-
+        "24-highwater-st" : {
+            name: "24-highwater-st",
+            west: "23-highwater-st",
+            south: "25-highwater-st"
+        },
+        "highwater-st-&-andrew-ln" : {
+            name: "highwater-st-&-andrew-ln",
+            north: "25-highwater-st",
+            west: "27-andrew-ln",
+            east: "32-andrew-ln"
+        },
+        "25-highwater-st" : {
+            name: "25-highwater-st",
+            north: "24-highwater-st",
+            south: "highwater-st-&-andrew-ln"
+        },
+        "27-andrew-ln" : {
+            name: "27-andrew-ln",
+            east: "highwater-st-&-andrew-ln"
+        },
+        "32-andrew-ln" : {
+            name: "32-andrew-ln",
+            west: "highwater-st-&-andrew-ln",
+            east: "andrew-ln-&-2nd-av"
+        },
+        "andrew-ln-&-2nd-av" : {
+            name: "andrew-ln-&-2nd-av",
+            west: "32-andrew-ln",
+        }
     }
 }
 

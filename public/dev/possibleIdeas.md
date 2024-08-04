@@ -43,3 +43,14 @@ estrella is like yoyuri
 game ends with e killing all five perpetrators
 
 
+actual inciting incident: 
+important politician in kaùloia is up for election -- big plans 
+// politican's son // is dui'ing and kills an innocent kaùloan
+tries to sweep under the rug, but laìnā notices the strange extradition of //politican's son// to long beach, ca
+he's very close to piecing it together, and so //politican// gets him kills, blames it on crime gang.
+however, this births two problems
+-> it turns out laìnā is a respected member of the KC
+-> crime gang is mobilized by strange random killing of Laìnā
+
+
+

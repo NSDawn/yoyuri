@@ -1,5 +1,5 @@
 import { GlobalSingleton, useGlobal } from "../GlobalContextHandler";
-import { World, getRoomDisplayName } from "../game/World";
+import { World, getRoomDisplayName, Room } from "../game/World";
 import { useState } from "react";
 import { Evidence } from "../game/EvidenceList";
 import Story, {storyPrepareString} from "../game/Story";
@@ -91,11 +91,15 @@ export class Command {
             case "go" :
                 
                 const [record, setRecord] = this.G.record;
-                const allowedDirections = ["north", "south", "east", "west"];
+                const allowedDirections = ["north", "south", "east", "west", "in", "out"];
                 
                 setCurrentInterface("map");
                 
                 let trackRoom = World[currentMap][currentRoom];
+                let trackMap = currentMap;
+                let previousRoom = trackRoom;
+                let actionTaken = "";
+
                 ret.push(trackRoom.name) // return [0] as starting room
                 if (!_args[1]) {
                     errorCode = 100;
@@ -105,25 +109,58 @@ export class Command {
                     errorCode = 1;
                     break;
                 }
+
                 for (let i = 1; i < _args.length; i ++) {
                     if (!allowedDirections.includes(_args[i])) {
                         errorCode = 102; // 102: Bad Direction
                         ret.push(args[i]);
                         break;
                     }
-                    trackRoom = World[currentMap][World[currentMap][trackRoom.name][_args[i]]];
+                    previousRoom = trackRoom;
+                    const previousRoomDisplayName = getRoomDisplayName(currentMap, previousRoom.name);
+                    
+                    const nextDirection = World[currentMap][trackRoom.name][_args[i]]?.split(".");
+                    
+                    console.log(nextDirection);
+                    if (!nextDirection) {
+                        errorCode = 101; 
+                        ret.push(args[i]);
+                        ret.push(previousRoomDisplayName);
+                        break;
+                    }
+                    let nextMap = currentMap;
+                    let nextRoom = "";
+                    
+                    if (nextDirection.length > 1) {
+                        nextMap = nextDirection[0];
+                        nextRoom = nextDirection[1];
+                    } else {
+                        nextRoom = nextDirection[0]
+                    }
+
+                    trackRoom = World[nextMap][nextRoom];
+                    trackMap = nextMap;
                     if (!trackRoom) {
                         errorCode = 101; // 101: Disallowed Direction
-                        ret.push(args[i]);
+                        ret.push(args[i]); 
+                        ret.push(previousRoomDisplayName);
                         break;
                     } 
-                } if (errorCode === 0) {
-                    
-                    ret.push(`${getRoomDisplayName(currentMap, trackRoom.name)} (${trackRoom.name})`)
-                    effect(() => {
-                        setCurrentRoom(trackRoom.name);
-                        
-                    })
+                } 
+                
+                
+                switch (errorCode) {
+                    case 0:
+                        ret.push(`${getRoomDisplayName(trackMap, trackRoom.name)} (${trackRoom.name})`)
+                        effect(() => {
+                            setCurrentRoom(trackRoom.name);
+                            setCurrentMap(trackMap);
+                        })
+                        break;
+                    case 3: 
+                        ret.push(`${previousRoom[actionTaken]}`);
+                        console.log(trackRoom);
+
                 }
 
                 break;
@@ -263,7 +300,7 @@ const RES :IRes = {
         0: (args, ret) => `Went "${args.slice(1).join(", ")}". You are now in "${ret[1]}".`,
         1: (_, ret) => `You are in "${ret[0]}"<br/>Usage: go <{north, south, east, west}>...<br/>You can specify multiple directions at once to walk in a path.`,
         100: (_, ret) => `You are in "${ret[0]}"<br/>Please provide direction(s) to go.<br/>Usage: go <{north, south, east, west}>...`,
-        101: (_, ret) => `"${ret[1]}" is not a valid direction on this path.`,
+        101: (_, ret) => `"${ret[1]}" is not a valid direction on this path, unable to go "${ret[1]}" from "${ret[2]}".`,
         102: (_, ret) => `"${ret[1]}" is not a valid direction. Try north, south, east, or west.`,
     },
 
@@ -306,6 +343,8 @@ const CMD_ALIASES: Record<string, string> = {
     "go": "go",
     "move": "go",
     "mv": "go",
+    "leave": "go out",
+    "enter": "go in",
 
     "t": "take",
     "take": "take",

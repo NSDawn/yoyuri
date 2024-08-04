@@ -84,6 +84,7 @@
   font-weight: normal;
   font-style: normal;
   font-size: 14px;
+  background-color: var(--rgb-root-bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

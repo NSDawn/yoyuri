@@ -127,6 +127,9 @@ const Story :Record<string, Record<number, string>> = {
 | HAKAHILO <I:0:hayu_inquisitive/>
 | - It's nothing. 
 |
+| UEHARA <I:0:wesley_neutral/>
+| - Uh...⑤ OK...⑩ I guess,⑤ let's get going home. <I:0:wesley_neutral/>
+|
         `
     }
     

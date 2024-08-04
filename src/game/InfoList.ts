@@ -63,6 +63,15 @@ Kaùloia (<nobr>/kaʊˈlɔɪ.ə/</nobr>, Kaùloan: <i>wēsū</i> <nobr>/ˈwɛː.
 California (<nobr>/kæ.lɪˈfɔɹ.njə/</nobr>) is a U.S. state lying on the west coast. <br> Home to approximately 36 million people, it is the most populous state, home to one of the largest economies in the world, with varied prolific sectors in agriculture, technology, business, health, education, and tourism. <br> The 31st state, its capital was established at Sacramento.
 `,
     },
+    "long-beach": {
+        name: "Long Beach",
+        sprite: "map_longbeach",
+        isSuccess: true,
+        textHTML: 
+`
+California (<nobr>/kæ.lɪˈfɔɹ.njə/</nobr>) is a U.S. state lying on the west coast. <br> Home to approximately 36 million people, it is the most populous state, home to one of the largest economies in the world, with varied prolific sectors in agriculture, technology, business, health, education, and tourism. <br> The 31st state, its capital was established at Sacramento.
+`,
+    },
 }
 
 export const InfoAliasList :Record<string, string> = {
@@ -73,6 +82,8 @@ export const InfoAliasList :Record<string, string> = {
     "kauloia": "kauloia",
     "default": "default",
     "california": "california",
+    "long-beach": "long-beach",
+    "longbeach": "long-beach",
     "": "",
 }
 

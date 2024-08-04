@@ -76,7 +76,7 @@ function MenuOptions() {
                     "max": ">>>>🐇",
                 }}
                 stateVariableSetFunction={setRecordTextSpeed}
-                stateKeys = {["slow", "medium", "fast", "max"]}
+                stateKeys = {[ "medium", "fast", "max", "slow",]}
             >
             </MenuOptionStatefulButton>,
         colorTheme:
